@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnosztika | Tip-Top Autókozmetika Szekszárd</title>
+  <meta name="description" content="Segíts eldönteni: probléma alapú diagnosztika a megfelelő autókozmetikai szolgáltatás kiválasztásához.">
+  <link rel="canonical" href="https://www.autokozmetikaszekszard.hu/diagnosztika/">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div data-site-header></div>
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="section-head">
+          <span class="crumb">Diagnosztika / Segíts eldönteni</span>
+          <h1 class="section-title">Nem tudod, melyik szolgáltatás kell?</h1>
+          <p class="section-copy">Válaszd ki, mi a fő probléma az autóval, és megmutatjuk a legvalószínűbb irányt.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-white">
+      <div class="container">
+        <div class="grid grid-2">
+          <article class="card">
+            <h2>Külső állapot</h2>
+            <div class="problem-list">
+              <button class="problem-button" type="button" data-diagnosis="karcos">Karcos, matt vagy fakó fényezés <i class="fa-solid fa-chevron-right"></i></button>
+              <button class="problem-button" type="button" data-diagnosis="ujauto">Új autót szeretnék megvédeni <i class="fa-solid fa-chevron-right"></i></button>
+              <button class="problem-button" type="button" data-diagnosis="lampa">Bemattult fényszórók <i class="fa-solid fa-chevron-right"></i></button>
+              <button class="problem-button" type="button" data-diagnosis="serules">Horpadás, kavicsfelverődés vagy kárpitsérülés <i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Belső állapot</h2>
+            <div class="problem-list">
+              <button class="problem-button" type="button" data-diagnosis="belso">Koszos, foltos vagy elhasznált belső tér <i class="fa-solid fa-chevron-right"></i></button>
+              <button class="problem-button" type="button" data-diagnosis="klima">Kellemetlen szag vagy klíma probléma <i class="fa-solid fa-chevron-right"></i></button>
+              <button class="problem-button" type="button" data-diagnosis="tetokarpit">Tetőkárpit probléma <i class="fa-solid fa-chevron-right"></i></button>
+              <button class="problem-button" type="button" data-diagnosis="ceges">Céges, munkás vagy erősen használt autó <i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+          </article>
+        </div>
+        <div class="diagnosis-result" data-diagnosis-result></div>
+      </div>
+    </section>
+  </main>
+  <div data-site-footer></div>
+  <script src="../js/main.js"></script>
+</body>
+</html>
