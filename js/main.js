@@ -385,6 +385,21 @@ function bindDiagnosis() {
   }
 }
 
+function bindServiceGroups() {
+  const groups = document.querySelectorAll("[data-service-groups] .service-group");
+  if (!groups.length) return;
+
+  groups.forEach((group) => {
+    group.addEventListener("toggle", () => {
+      if (!group.open) return;
+
+      groups.forEach((otherGroup) => {
+        if (otherGroup !== group) otherGroup.open = false;
+      });
+    });
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderHeader();
   renderFooter();
@@ -393,4 +408,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initMobileCtaVisibility();
   initBackToTop();
   bindDiagnosis();
+  bindServiceGroups();
 });
