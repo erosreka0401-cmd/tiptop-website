@@ -411,6 +411,260 @@ function bindServiceGroups() {
   });
 }
 
+const priceCategories = [
+  ["cleaning", "Tisztítás és beltérápolás"],
+  ["climate", "Klíma és szagtalanítás"],
+  ["paint", "Fényezés, polírozás és védelem"],
+  ["special", "Optikai és speciális kezelések"],
+  ["fleet", "Nagyobb járművek és céges igények"],
+  ["custom", "Egyedi állapotfelméréses szolgáltatások"],
+];
+
+const priceSizeMeta = {
+  all: { label: "Minden méret", icon: "fa-layer-group" },
+  brand: { label: "BMW, AUDI, MERCEDES, VW márkaspecifikus", icon: "fa-star" },
+  city: { label: "Városi cirkáló", icon: "fa-car-side" },
+  car: { label: "Személyautó, SUV, Egyterű", icon: "fa-car" },
+  offroad: { label: "Terepjáró", icon: "fa-truck-monster" },
+  van: { label: "Kisbusz, Tgk, Pick Up", icon: "fa-van-shuttle" },
+};
+
+function normalizePriceSize(size) {
+  if (size === "Személygépkocsi") return "brand";
+  if (size === "Városi cirkáló") return "city";
+  if (size === "Személyautó / SUV" || size === "Személyautó / SUV / egyterű") return "car";
+  if (size === "Terepjáró" || size === "Városi terepjáró") return "offroad";
+  if (size === "Kisbusz / TGK" || size === "Kisbusz / TGK / Pick Up") return "van";
+  return "other";
+}
+
+const priceCatalog = [
+  { category: "cleaning", title: "AUDI prémium külső-belső takarítás", size: "Személygépkocsi", price: 25000 },
+  { category: "cleaning", title: "BMW prémium külső-belső takarítás", size: "Személygépkocsi", price: 25000 },
+  { category: "cleaning", title: "MERCEDES prémium külső-belső takarítás", size: "Személygépkocsi", price: 25000 },
+  { category: "cleaning", title: "VOLKSWAGEN prémium külső-belső takarítás", size: "Személygépkocsi", price: 25000 },
+  { category: "cleaning", title: "Külső mosás", size: "Városi cirkáló", price: 7500 },
+  { category: "cleaning", title: "Belső takarítás", size: "Városi cirkáló", price: 8000 },
+  { category: "cleaning", title: "Külső + belső takarítás", size: "Városi cirkáló", price: 15500 },
+  { category: "cleaning", title: "Prémium külső-belső takarítás Nano Finish bevonattal", size: "Városi cirkáló", price: 16500 },
+  { category: "cleaning", title: "Külső mosás", size: "Személyautó / SUV / egyterű", price: 8500 },
+  { category: "cleaning", title: "Belső takarítás", size: "Személyautó / SUV / egyterű", price: 9000 },
+  { category: "cleaning", title: "Külső + belső takarítás", size: "Személyautó / SUV / egyterű", price: 17500 },
+  { category: "cleaning", title: "Prémium külső-belső takarítás Nano Finish bevonattal", size: "Személyautó / SUV / egyterű", price: 18500 },
+  { category: "cleaning", title: "Prémium külső mosás Nano Finish bevonattal", size: "Városi terepjáró", price: 10000 },
+  { category: "cleaning", title: "Belső takarítás", size: "Városi terepjáró", price: 10000 },
+  { category: "cleaning", title: "Külső + belső takarítás", size: "Városi terepjáró", price: 20000 },
+  { category: "cleaning", title: "Prémium külső-belső takarítás Nano Finish bevonattal", size: "Városi terepjáró", price: 21000 },
+  { category: "cleaning", title: "Külső mosás", size: "Kisbusz / TGK / Pick Up", price: 12000 },
+  { category: "cleaning", title: "Belső takarítás", size: "Kisbusz / TGK / Pick Up", price: 12000 },
+  { category: "cleaning", title: "Prémium külső-belső takarítás Nano Finish bevonattal", size: "Kisbusz / TGK / Pick Up", price: 27000 },
+  { category: "cleaning", title: "Normál kárpittisztítás", size: "Városi cirkáló", price: 49990 },
+  { category: "cleaning", title: "Normál kárpittisztítás", size: "Személyautó / SUV", price: 54990 },
+  { category: "cleaning", title: "Normál kárpittisztítás", size: "Terepjáró", price: 59990 },
+  { category: "cleaning", title: "Normál kárpittisztítás", size: "Kisbusz / TGK", price: 69990 },
+  { category: "cleaning", title: "Prémium kárpittisztítás szövetvédelemmel", size: "Városi cirkáló", price: 59990 },
+  { category: "cleaning", title: "Prémium kárpittisztítás szövetvédelemmel", size: "Személyautó / SUV", price: 59990 },
+  { category: "cleaning", title: "Prémium kárpittisztítás szövetvédelemmel", size: "Terepjáró", price: 69990 },
+  { category: "cleaning", title: "Prémium kárpittisztítás szövetvédelemmel", size: "Kisbusz / TGK", price: 79990 },
+  { category: "cleaning", title: "Üléstisztítás / darab", size: "Kiegészítő", price: 7500 },
+  { category: "cleaning", title: "Erős szennyeződés felár", size: "Kiegészítő", price: 5000 },
+  { category: "cleaning", title: "Kisbusz kárpittisztítás, 9 személy", size: "Kisbusz / TGK", price: 65000 },
+  { category: "cleaning", title: "Szőnyegtisztítás / m²", size: "Szőnyeg", price: 2000 },
+  { category: "cleaning", title: "Szőnyegimpregnálás / m²", size: "Szőnyeg", price: 1600 },
+
+  { category: "climate", title: "Klíma Kombó, vegyszeres + ózonos beltér", size: "Klíma", price: 17900 },
+  { category: "climate", title: "Klímatisztítás Kombó, ózon + beltér fertőtlenítés", size: "Klíma", price: 17900 },
+  { category: "climate", title: "Vegyszer + ózon, ajándék ózonos utastér-fertőtlenítéssel", size: "Klíma", price: 19900 },
+  { category: "climate", title: "Ózonos klímatisztítás", size: "Klíma", price: 12000 },
+  { category: "climate", title: "Ózonos szagtalanítás / óra", size: "Klíma", price: 12000 },
+  { category: "climate", title: "Vegyszeres klímatisztítás / klíma kombó", size: "Klíma", price: 17900 },
+  { category: "climate", title: "Hozott pollenszűrő cseréje", size: "Klíma", price: 0, note: "Díjmentesen kérhető" },
+
+  { category: "paint", title: "Fényesítő polírozás", size: "Városi cirkáló", price: 45000 },
+  { category: "paint", title: "Fényesítő polírozás", size: "Személyautó / SUV", price: 60000 },
+  { category: "paint", title: "Fényesítő polírozás", size: "Terepjáró", price: 80000 },
+  { category: "paint", title: "Fényesítő polírozás", size: "Kisbusz / TGK", price: 100000 },
+  { category: "paint", title: "Kétlépcsős polírozás", size: "Városi cirkáló", price: 80000 },
+  { category: "paint", title: "Kétlépcsős polírozás", size: "Személyautó / SUV", price: 100000 },
+  { category: "paint", title: "Kétlépcsős polírozás", size: "Terepjáró", price: 120000 },
+  { category: "paint", title: "Kétlépcsős polírozás", size: "Kisbusz / TGK", price: 140000 },
+  { category: "paint", title: "PolishAngel 3-5 lépcsős prémium polírozás", size: "Városi cirkáló", price: 100000 },
+  { category: "paint", title: "PolishAngel 3-5 lépcsős prémium polírozás", size: "Személyautó / SUV", price: 120000 },
+  { category: "paint", title: "PolishAngel 3-5 lépcsős prémium polírozás", size: "Terepjáró", price: 150000 },
+  { category: "paint", title: "PolishAngel 3-5 lépcsős prémium polírozás", size: "Kisbusz / TGK", price: 180000 },
+  { category: "paint", title: "Prémium waxolás", size: "Kiegészítő", price: 25000 },
+  { category: "paint", title: "Kerámia szélvédő bevonat", size: "Kiegészítő", price: 10000 },
+  { category: "paint", title: "Kerámia szélvédő vízlepergető bevonat", size: "Kiegészítő", price: 12000 },
+  { category: "paint", title: "Bronz kerámia csomag", size: "Városi cirkáló", price: 99000 },
+  { category: "paint", title: "Bronz kerámia csomag", size: "Személyautó / SUV", price: 130000 },
+  { category: "paint", title: "Bronz kerámia csomag", size: "Terepjáró", price: 150000 },
+  { category: "paint", title: "Bronz kerámia csomag", size: "Kisbusz / TGK", price: 180000 },
+  { category: "paint", title: "Gold kerámia csomag", size: "Városi cirkáló", price: 230000 },
+  { category: "paint", title: "Gold kerámia csomag", size: "Személyautó / SUV", price: 260000 },
+  { category: "paint", title: "Gold kerámia csomag", size: "Terepjáró", price: 290000 },
+  { category: "paint", title: "Gold kerámia csomag", size: "Kisbusz / TGK", price: 300000 },
+  { category: "paint", title: "Graphene+ csomag", size: "Városi cirkáló", price: 280000 },
+  { category: "paint", title: "Graphene+ csomag", size: "Személyautó / SUV", price: 320000 },
+  { category: "paint", title: "Graphene+ csomag", size: "Terepjáró", price: 350000 },
+  { category: "paint", title: "Graphene+ csomag", size: "Kisbusz / TGK", price: 380000 },
+  { category: "paint", title: "Kerámia utókövető csomag", size: "Kiegészítő", price: 45000 },
+
+  { category: "special", title: "Lámpapolírozás kerámiával, 2 darab", size: "Lámpa", price: 25000 },
+  { category: "special", title: "Lámpafóliázás, 2 darab", size: "Lámpa", price: 40000 },
+  { category: "special", title: "Autó motormosás", size: "Motortér", price: 10000 },
+  { category: "special", title: "DSL hidrogénes motortisztítás", size: "Motortér", price: 20000 },
+
+  { category: "fleet", title: "Teherautó belső takarítás", size: "Teherautó / munkagép", price: 35000 },
+  { category: "fleet", title: "Teherautó / munkagép kárpittisztítás", size: "Teherautó / munkagép", price: 70000 },
+  { category: "fleet", title: "Teherautó / munkagép polírozás", size: "Teherautó / munkagép", price: 80000 },
+  { category: "fleet", title: "Kamion / munkagép kombi csomag", size: "Teherautó / munkagép", price: 120000 },
+  { category: "fleet", title: "Kárpittisztítás + polírozás kombó csomag", size: "Teherautó / munkagép", price: 100000 },
+  { category: "fleet", title: "Traktor kárpittisztítás + polírozás kombó csomag", size: "Teherautó / munkagép", price: 80000 },
+
+  { category: "custom", title: "Bőr- és szövetjavítás", size: "Egyedi", price: null, note: "Egyedi egyeztetés alapján" },
+  { category: "custom", title: "Bőr- és szövetfestés", size: "Egyedi", price: null, note: "Egyedi egyeztetés alapján" },
+  { category: "custom", title: "Belső felületi sérülések javítása", size: "Egyedi", price: null, note: "Fotóbeküldés vagy személyes megtekintés javasolt" },
+  { category: "custom", title: "Horpadásjavítás", size: "Egyedi", price: null, note: "Egyedi állapotfelmérés alapján" },
+  { category: "custom", title: "Kavicsfelverődés / külső sérülés kezelése", size: "Egyedi", price: null, note: "Egyedi állapotfelmérés alapján" },
+];
+
+function formatPrice(price) {
+  if (price === null) return "Egyedi";
+  return `${price.toLocaleString("hu-HU")} Ft`;
+}
+
+function bindPriceCalculator() {
+  const root = document.querySelector("[data-price-calculator]");
+  if (!root) return;
+
+  const categoryRoot = root.querySelector("[data-price-categories]");
+  const listRoot = root.querySelector("[data-price-list]");
+  const sizeSelect = root.querySelector("[data-price-size]");
+  const sizeIcon = root.querySelector("[data-price-size-icon] i");
+  const selectedRoot = root.querySelector("[data-selected-list]");
+  const totalRoot = root.querySelector("[data-selected-total]");
+  const clearButton = root.querySelector("[data-selected-clear]");
+  const bookingButton = root.querySelector("[data-selected-booking]");
+  let activeCategory = priceCategories[0][0];
+  let selected = [];
+
+  const getItemId = (item) => `${item.category}|${item.title}|${item.size}|${item.price ?? "custom"}`;
+
+  const saveSelection = () => {
+    localStorage.setItem("tiptopSelectedServices", JSON.stringify(selected));
+    if (bookingButton) bookingButton.href = toRoot("foglalas/");
+  };
+
+  const getSizeLabel = (item) => {
+    return priceSizeMeta[normalizePriceSize(item.size)]?.label || item.size;
+  };
+
+  const updateSizeIcon = () => {
+    if (!sizeIcon) return;
+    const meta = priceSizeMeta[sizeSelect.value] || priceSizeMeta.all;
+    sizeIcon.className = `fa-solid ${meta.icon}`;
+  };
+
+  const renderSelected = () => {
+    if (!selected.length) {
+      selectedRoot.innerHTML = `<p class="selected-empty">Még nincs kiválasztott szolgáltatás.</p>`;
+    } else {
+      selectedRoot.innerHTML = selected
+        .map((item, index) => `
+          <div class="selected-item">
+            <span>
+              <strong>${item.title}</strong>
+              <small>${getSizeLabel(item)}${item.note ? ` · ${item.note}` : ""}</small>
+            </span>
+            <button type="button" data-remove-selected="${index}" aria-label="Kiválasztás törlése"><i class="fa-solid fa-xmark"></i></button>
+            <b>${formatPrice(item.price)}</b>
+          </div>
+        `)
+        .join("");
+    }
+
+    const total = selected.reduce((sum, item) => sum + (item.price || 0), 0);
+    totalRoot.textContent = formatPrice(total);
+    saveSelection();
+  };
+
+  const renderItems = () => {
+    const size = sizeSelect.value;
+    const filtered = priceCatalog.filter((item) => {
+      const categoryMatch = item.category === activeCategory;
+      const sizeKey = normalizePriceSize(item.size);
+      const sizeMatch = size === "all" || sizeKey === size || sizeKey === "other";
+      return categoryMatch && sizeMatch;
+    });
+
+    listRoot.innerHTML = filtered.length
+      ? filtered
+          .map((item) => {
+            const isSelected = selected.some((selectedItem) => getItemId(selectedItem) === getItemId(item));
+            return `
+              <article class="price-option ${isSelected ? "is-selected" : ""}">
+                <div>
+                  <h3>${item.title}</h3>
+                  <p>${getSizeLabel(item)}${item.note ? ` · ${item.note}` : ""}</p>
+                </div>
+                <strong>${formatPrice(item.price)}</strong>
+                <button type="button" data-price-add="${getItemId(item)}">${isSelected ? "Kiválasztva" : "Kiválasztom"}</button>
+              </article>
+            `;
+          })
+          .join("")
+      : `<p class="selected-empty">Ehhez a szűréshez nincs megjeleníthető tétel.</p>`;
+  };
+
+  const renderCategories = () => {
+    categoryRoot.innerHTML = priceCategories
+      .map(([id, label]) => `<button type="button" class="${id === activeCategory ? "is-active" : ""}" data-price-category="${id}">${label}</button>`)
+      .join("");
+  };
+
+  categoryRoot.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-price-category]");
+    if (!button) return;
+    activeCategory = button.getAttribute("data-price-category");
+    renderCategories();
+    renderItems();
+  });
+
+  listRoot.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-price-add]");
+    if (!button) return;
+    const item = priceCatalog.find((catalogItem) => getItemId(catalogItem) === button.getAttribute("data-price-add"));
+    if (!item) return;
+    const exists = selected.some((selectedItem) => getItemId(selectedItem) === getItemId(item));
+    selected = exists ? selected.filter((selectedItem) => getItemId(selectedItem) !== getItemId(item)) : [...selected, item];
+    renderItems();
+    renderSelected();
+  });
+
+  selectedRoot.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-remove-selected]");
+    if (!button) return;
+    selected = selected.filter((_, index) => index !== Number(button.getAttribute("data-remove-selected")));
+    renderItems();
+    renderSelected();
+  });
+
+  clearButton?.addEventListener("click", () => {
+    selected = [];
+    renderItems();
+    renderSelected();
+  });
+
+  sizeSelect.addEventListener("change", () => {
+    updateSizeIcon();
+    renderItems();
+  });
+  renderCategories();
+  updateSizeIcon();
+  renderItems();
+  renderSelected();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderHeader();
   renderFooter();
@@ -420,4 +674,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initBackToTop();
   bindDiagnosis();
   bindServiceGroups();
+  bindPriceCalculator();
 });

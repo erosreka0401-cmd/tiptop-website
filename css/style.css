@@ -1060,6 +1060,243 @@ h4 {
   white-space: nowrap;
 }
 
+.price-calculator-section {
+  padding-top: 46px;
+}
+
+.price-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 24px;
+  align-items: start;
+}
+
+.price-main,
+.selected-services {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.14);
+}
+
+.price-main {
+  padding: 26px;
+}
+
+.price-toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.price-toolbar h2,
+.selected-head h2 {
+  margin-top: 6px;
+  color: var(--ink-strong);
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.05;
+  font-weight: 900;
+  font-style: italic;
+}
+
+.price-size-filter {
+  display: grid;
+  gap: 8px;
+  min-width: 260px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.price-size-control {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+
+.price-size-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #07090b;
+  background: linear-gradient(135deg, #ffe87a, var(--gold));
+}
+
+.price-size-filter select {
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--ink-strong);
+  background: var(--panel-strong);
+  font: inherit;
+  font-weight: 800;
+}
+
+.price-category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.price-category-tabs button {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-strong);
+  background: rgba(11, 18, 23, 0.24);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.price-category-tabs button.is-active {
+  color: #07090b;
+  border-color: transparent;
+  background: linear-gradient(135deg, #ffe87a, var(--gold));
+}
+
+.price-list {
+  display: grid;
+  gap: 12px;
+}
+
+.price-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--panel-strong);
+}
+
+.price-option.is-selected {
+  border-color: rgba(242, 200, 75, 0.55);
+  background: rgba(242, 200, 75, 0.08);
+}
+
+.price-option h3 {
+  margin-bottom: 4px;
+  color: var(--ink-strong);
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.price-option p {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.price-option strong {
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.price-option button,
+.selected-item button {
+  border: 1px solid rgba(242, 200, 75, 0.28);
+  border-radius: 12px;
+  color: var(--ink-strong);
+  background: rgba(242, 200, 75, 0.06);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.price-option button {
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+.selected-services {
+  position: sticky;
+  top: 96px;
+  padding: 24px;
+}
+
+.selected-list {
+  display: grid;
+  gap: 12px;
+  margin: 22px 0;
+}
+
+.selected-empty,
+.selected-note {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.selected-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 34px;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(11, 18, 23, 0.22);
+}
+
+.selected-item strong,
+.selected-item small,
+.selected-item b {
+  display: block;
+}
+
+.selected-item strong {
+  color: var(--ink-strong);
+  font-size: 0.94rem;
+}
+
+.selected-item small {
+  margin-top: 4px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.selected-item button {
+  width: 34px;
+  height: 34px;
+}
+
+.selected-item b {
+  grid-column: 1 / -1;
+  color: var(--gold);
+}
+
+.selected-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-strong);
+  font-weight: 900;
+}
+
+.selected-summary strong {
+  color: var(--gold);
+  font-size: 1.4rem;
+}
+
+.selected-note {
+  margin: 14px 0 18px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.selected-services .btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
 .offer-image,
 .media-placeholder {
   min-height: 230px;
@@ -1360,6 +1597,14 @@ textarea.field {
     grid-template-columns: 1fr;
   }
 
+  .price-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .selected-services {
+    position: static;
+  }
+
   .service-category-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1512,6 +1757,29 @@ textarea.field {
 
   .page-hero {
     padding: 62px 0 54px;
+  }
+
+  .price-main,
+  .selected-services {
+    padding: 20px;
+  }
+
+  .price-toolbar,
+  .price-option {
+    grid-template-columns: 1fr;
+  }
+
+  .price-toolbar {
+    display: grid;
+    align-items: start;
+  }
+
+  .price-size-filter {
+    min-width: 0;
+  }
+
+  .price-option {
+    justify-items: start;
   }
 
   .card,

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Árak | Tip-Top Autókozmetika Szekszárd</title>
-  <meta name="description" content="Tájékoztató árak autómosásra, kárpittisztításra, polírozásra, kerámia bevonatra és speciális autókozmetikai szolgáltatásokra.">
+  <meta name="description" content="Tájékoztató árak autóápolásra, kárpittisztításra, polírozásra, kerámia bevonatra, klímatisztításra és speciális autókozmetikai szolgáltatásokra.">
   <link rel="canonical" href="https://www.autokozmetikaszekszard.hu/arak/">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../css/style.css">
@@ -12,13 +12,63 @@
 <body>
   <div data-site-header></div>
   <main>
-    <section class="page-hero"><div class="container"><div class="section-head"><span class="crumb">Árak</span><h1 class="section-title">Biztonságérzet, nem végleges online árajánlat.</h1><p class="section-copy">Az árak tájékoztató jellegűek. A pontos díj függ az autó méretétől, állapotától és a választott kezeléstől.</p></div></div></section>
-    <section class="section section-white">
-      <div class="container grid grid-2">
-        <article class="price-card"><h2>Takarítás és kárpit</h2><div class="price-row"><span>Külső-belső takarítás</span><strong>15 500 Ft-tól</strong></div><div class="price-row"><span>Prémium külső-belső takarítás</span><strong>16 500 Ft-tól</strong></div><div class="price-row"><span>Kárpittisztítás</span><strong>49 990 Ft-tól</strong></div><div class="price-row"><span>Klíma kombó</span><strong>17 900 Ft-tól</strong></div></article>
-        <article class="price-card"><h2>Polír és védelem</h2><div class="price-row"><span>Fényesítő polírozás</span><strong>45 000 Ft-tól</strong></div><div class="price-row"><span>2 lépcsős polírozás</span><strong>80 000 Ft-tól</strong></div><div class="price-row"><span>Kerámia bevonat</span><strong>99 000 Ft-tól</strong></div><div class="price-row"><span>Lámpapolírozás kerámiával</span><strong>25 000 Ft-tól</strong></div></article>
-        <article class="integration-card"><strong>Árkezelési döntés későbbre</strong><p>Az első verzióban az árak kódban szerepelnek. Ha gyakran változnak, később CMS/adatfájl alapú árkezelést kapnak.</p></article>
-        <article class="integration-card"><strong>Konverziós szabály</strong><p>Az árak ne váltsák ki az állapotfelmérést. Minden árblokk foglalásra vagy fotóbeküldésre terel.</p><a class="btn btn-primary" href="../foglalas/">Időpontot kérek</a></article>
+    <section class="page-hero">
+      <div class="container">
+        <div class="section-head">
+          <span class="crumb">Biztonságérzet, nem végleges online árajánlat</span>
+          <h1 class="section-title">Átlátható, állapothoz igazított ajánlatok</h1>
+          <p class="section-copy">Az árak tájékoztató jellegűek, mert a pontos díjat az autó mérete, állapota és a választott kezelés határozza meg.</p>
+          <p class="section-copy">Az árlista segít előre tájékozódni, a végleges ajánlatot szükség esetén fotó vagy állapotfelmérés alapján pontosítjuk.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-white price-calculator-section">
+      <div class="container">
+        <div class="price-layout" data-price-calculator>
+          <div class="price-main">
+            <div class="price-toolbar">
+              <div>
+                <span class="section-kicker">Árkalkuláció</span>
+                <h2>Kategória és autóméret alapján</h2>
+              </div>
+              <label class="price-size-filter">
+                <span>Autóméret</span>
+                <div class="price-size-control">
+                  <div class="price-size-icon" data-price-size-icon><i class="fa-solid fa-layer-group"></i></div>
+                  <select data-price-size>
+                    <option value="all">Minden méret</option>
+                    <option value="brand">BMW, AUDI, MERCEDES, VW márkaspecifikus</option>
+                    <option value="city">Városi cirkáló</option>
+                    <option value="car">Személyautó, SUV, Egyterű</option>
+                    <option value="offroad">Terepjáró</option>
+                    <option value="van">Kisbusz, Tgk, Pick Up</option>
+                  </select>
+                </div>
+              </label>
+            </div>
+
+            <div class="price-category-tabs" data-price-categories></div>
+            <div class="price-list" data-price-list></div>
+          </div>
+
+          <aside class="selected-services" aria-live="polite">
+            <div class="selected-head">
+              <span class="section-kicker">Kalkuláció</span>
+              <h2>Kiválasztott szolgáltatások</h2>
+            </div>
+            <div class="selected-list" data-selected-list>
+              <p class="selected-empty">Még nincs kiválasztott szolgáltatás.</p>
+            </div>
+            <div class="selected-summary">
+              <span>Tájékoztató összeg</span>
+              <strong data-selected-total>0 Ft</strong>
+            </div>
+            <p class="selected-note">A végleges ár az autó állapota és a pontos igény alapján módosulhat.</p>
+            <a class="btn btn-primary" href="../foglalas/" data-selected-booking>Időpontot kérek ezekre</a>
+            <button class="btn btn-outline" type="button" data-selected-clear>Lista törlése</button>
+          </aside>
+        </div>
       </div>
     </section>
   </main>
