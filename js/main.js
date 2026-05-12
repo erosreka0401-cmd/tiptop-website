@@ -444,10 +444,10 @@ function normalizePriceSize(size) {
 }
 
 const priceCatalog = [
-  { category: "wash", title: "AUDI prémium külső-belső takarítás", size: "Személygépkocsi", price: 25000 },
-  { category: "wash", title: "BMW prémium külső-belső takarítás", size: "Személygépkocsi", price: 25000 },
-  { category: "wash", title: "MERCEDES prémium külső-belső takarítás", size: "Személygépkocsi", price: 25000 },
-  { category: "wash", title: "VOLKSWAGEN prémium külső-belső takarítás", size: "Személygépkocsi", price: 25000 },
+  { category: "wash", title: "AUDI prémium külső-belső takarítás", size: "Személygépkocsi", price: 25000, sizeLabel: "AUDI márkaspecifikus" },
+  { category: "wash", title: "BMW prémium külső-belső takarítás", size: "Személygépkocsi", price: 25000, sizeLabel: "BMW márkaspecifikus" },
+  { category: "wash", title: "MERCEDES prémium külső-belső takarítás", size: "Személygépkocsi", price: 25000, sizeLabel: "MERCEDES márkaspecifikus" },
+  { category: "wash", title: "VOLKSWAGEN prémium külső-belső takarítás", size: "Személygépkocsi", price: 25000, sizeLabel: "VW márkaspecifikus" },
   { category: "wash", title: "Külső mosás", size: "Városi cirkáló", price: 7500 },
   { category: "wash", title: "Belső takarítás", size: "Városi cirkáló", price: 8000 },
   { category: "wash", title: "Külső + belső takarítás", size: "Városi cirkáló", price: 15500 },
@@ -567,6 +567,7 @@ function bindPriceCalculator() {
   };
 
   const getSizeLabel = (item) => {
+    if (item.sizeLabel) return item.sizeLabel;
     if (item.category === "carpet") return "m² alapú szolgáltatás";
     if (item.category === "repair" || item.category === "dent") return "Állapotfelmérés alapján";
     if (["climate", "lights", "engine"].includes(item.category)) return "Fix díjas szolgáltatás";
