@@ -430,6 +430,10 @@ h4 {
   padding: 88px 0;
 }
 
+.page-hero + .section {
+  padding-top: 46px;
+}
+
 .compact-section {
   padding: 64px 0;
   overflow: hidden;
@@ -641,6 +645,15 @@ h4 {
   font-style: italic;
 }
 
+.service-group summary em {
+  max-width: 720px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
+  font-style: normal;
+}
+
 .service-group summary i {
   width: 42px;
   height: 42px;
@@ -672,6 +685,16 @@ h4 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.service-category-grid-featured {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.service-category-grid-featured .featured-service-card {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: 75%;
+}
+
 .service-category-grid .service-card {
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr);
@@ -690,18 +713,26 @@ h4 {
 
 .service-category-grid .service-card h3 {
   margin-bottom: 0;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .service-category-grid .service-card p,
-.service-category-grid .service-tags,
+.service-category-grid .service-tags {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-left: 0;
+  text-align: left;
+}
+
 .service-category-grid .card-link {
   grid-column: 1 / -1;
+  justify-self: end;
+  margin-left: auto;
 }
 
 .service-category-grid .service-card p {
   margin-top: 14px;
-  font-size: 0.96rem;
+  font-size: 1.06rem;
   line-height: 1.48;
 }
 
@@ -721,7 +752,7 @@ h4 {
   border-radius: 999px;
   color: var(--muted);
   background: rgba(11, 18, 23, 0.24);
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 800;
   line-height: 1.15;
 }
@@ -827,7 +858,7 @@ h4 {
   gap: 8px;
   margin-top: auto;
   color: var(--gold);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 900;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1336,6 +1367,10 @@ textarea.field {
   .service-category-grid-3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .service-category-grid-featured .featured-service-card {
+    width: 100%;
+  }
 }
 
 @media (min-width: 1041px) {
@@ -1500,8 +1535,13 @@ textarea.field {
   }
 
   .service-category-grid-2,
-  .service-category-grid-3 {
+  .service-category-grid-3,
+  .service-category-grid-featured {
     grid-template-columns: 1fr;
+  }
+
+  .service-category-grid-featured .featured-service-card {
+    width: 100%;
   }
 
   .service-category-grid .service-card {
