@@ -889,6 +889,25 @@ function bindPriceCalculator() {
   renderSelected();
 }
 
+function initDesktopOpenDetails() {
+  const detailsBlocks = document.querySelectorAll("[data-desktop-open]");
+  if (!detailsBlocks.length) return;
+
+  const syncOpenState = () => {
+    const isDesktop = window.matchMedia("(min-width: 1041px)").matches;
+    detailsBlocks.forEach((details) => {
+      if (isDesktop) {
+        details.open = true;
+      } else {
+        details.open = false;
+      }
+    });
+  };
+
+  syncOpenState();
+  window.addEventListener("resize", syncOpenState);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderHeader();
   renderFooter();
@@ -899,5 +918,6 @@ document.addEventListener("DOMContentLoaded", () => {
   bindDiagnosis();
   bindServiceGroups();
   bindPriceCalculator();
+  initDesktopOpenDetails();
 });
 
