@@ -1160,6 +1160,12 @@ h4 {
   color: var(--green);
 }
 
+.feature-list svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  color: var(--gold);
+}
+
 .service-detail-visible .service-detail-feature-list {
   margin-top: 34px;
 }
