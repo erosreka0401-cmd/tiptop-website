@@ -143,6 +143,10 @@ function renderFooter() {
     <button class="back-to-top" type="button" data-back-to-top aria-label="Vissza az oldal tetejére">
       <i class="fa-solid fa-arrow-up"></i>
     </button>
+    <button class="floating-back-button" type="button" data-history-back aria-label="Vissza az előző oldalra">
+      <i class="fa-solid fa-arrow-left"></i>
+      <span>Vissza</span>
+    </button>
   `;
 }
 
@@ -223,6 +227,13 @@ function initBackToTop() {
   const button = document.querySelector("[data-back-to-top]");
   if (!button) return;
 
+  const currentPath = window.location.pathname.replace(/\/index\.html$/, "/");
+  const homePath = new URL(toRoot("index.html"), window.location.href).pathname.replace(/\/index\.html$/, "/");
+  if (currentPath === homePath) {
+    button.hidden = true;
+    return;
+  }
+
   const updateVisibility = () => {
     button.classList.toggle("is-visible", window.scrollY > 640);
   };
@@ -233,6 +244,36 @@ function initBackToTop() {
 
   updateVisibility();
   window.addEventListener("scroll", updateVisibility, { passive: true });
+}
+
+function initHistoryBackButton() {
+  const button = document.querySelector("[data-history-back]");
+  if (!button) return;
+
+  const currentPath = window.location.pathname.replace(/\/index\.html$/, "/");
+  const homePath = new URL(toRoot("index.html"), window.location.href).pathname.replace(/\/index\.html$/, "/");
+  const hasSameOriginReferrer = (() => {
+    if (!document.referrer) return false;
+    try {
+      return new URL(document.referrer).origin === window.location.origin;
+    } catch (error) {
+      return false;
+    }
+  })();
+
+  if (currentPath === homePath) {
+    button.hidden = true;
+    return;
+  }
+
+  button.addEventListener("click", () => {
+    if (hasSameOriginReferrer) {
+      window.history.back();
+      return;
+    }
+
+    window.location.href = currentPath.includes("/szolgaltatasok/") ? toRoot("szolgaltatasok/") : toRoot("index.html");
+  });
 }
 
 function initResponsiveHero() {
@@ -1094,6 +1135,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initResponsiveHero();
   initMobileCtaVisibility();
   initBackToTop();
+  initHistoryBackButton();
   bindDiagnosis();
   bindServiceGroups();
   bindPriceCalculator();
