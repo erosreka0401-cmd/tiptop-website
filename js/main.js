@@ -1016,6 +1016,14 @@ function bindPriceCalculator() {
 }
 
 function bindPriceSelectionLinks() {
+  document.querySelectorAll("[data-price-group-link]").forEach((link) => {
+    link.addEventListener("click", () => {
+      const category = link.getAttribute("data-price-group-link");
+      if (!category) return;
+      localStorage.setItem("tiptopPreferredPriceCategory", category);
+    });
+  });
+
   document.querySelectorAll("[data-price-select-title]").forEach((link) => {
     link.addEventListener("click", () => {
       const title = link.getAttribute("data-price-select-title");
