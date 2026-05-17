@@ -701,6 +701,7 @@ function bindPriceCalculator() {
   const categorySelect = root.querySelector("[data-price-category-select]");
   const listRoot = root.querySelector("[data-price-list]");
   const sizeSelect = root.querySelector("[data-price-size]");
+  const sizeFilter = sizeSelect?.closest(".price-size-filter");
   const sizeIcon = root.querySelector("[data-price-size-icon] i");
   const selectedRoot = root.querySelector("[data-selected-list]");
   const totalRoot = root.querySelector("[data-selected-total]");
@@ -710,6 +711,31 @@ function bindPriceCalculator() {
   let selected = [];
 
   const getItemId = (item) => item.id || `${item.category}|${item.title}|${item.size}|${item.price ?? "custom"}`;
+
+  try {
+    const storedSelection = JSON.parse(localStorage.getItem("tiptopSelectedServices") || "[]");
+    if (Array.isArray(storedSelection)) selected = storedSelection;
+  } catch (error) {
+    selected = [];
+  }
+
+  const preferredCategory = localStorage.getItem("tiptopPreferredPriceCategory");
+  if (priceCategories.some(([id]) => id === preferredCategory)) {
+    activeCategory = preferredCategory;
+    localStorage.removeItem("tiptopPreferredPriceCategory");
+  }
+
+  const pendingTitle = localStorage.getItem("tiptopPendingPriceTitle");
+  const pendingCategory = localStorage.getItem("tiptopPendingPriceCategory");
+  let pendingSizeSelection = pendingTitle && pendingCategory ? { title: pendingTitle, category: pendingCategory } : null;
+  const trackedTitle = localStorage.getItem("tiptopTrackedSizeTitle");
+  const trackedCategory = localStorage.getItem("tiptopTrackedSizeCategory");
+  let trackedSizeSelection = trackedTitle && trackedCategory ? { title: trackedTitle, category: trackedCategory } : null;
+  if (pendingCategory && priceCategories.some(([id]) => id === pendingCategory)) {
+    activeCategory = pendingCategory;
+  } else if (trackedCategory && priceCategories.some(([id]) => id === trackedCategory)) {
+    activeCategory = trackedCategory;
+  }
 
   const saveSelection = () => {
     localStorage.setItem("tiptopSelectedServices", JSON.stringify(selected));
@@ -839,6 +865,81 @@ function bindPriceCalculator() {
     categorySelect.value = activeCategory;
   };
 
+  const clearPendingSizeSelection = () => {
+    pendingSizeSelection = null;
+    localStorage.removeItem("tiptopPendingPriceTitle");
+    localStorage.removeItem("tiptopPendingPriceCategory");
+    sizeFilter?.classList.remove("is-attention");
+    root.querySelector("[data-size-prompt]")?.remove();
+  };
+
+  const addPendingSizeSelection = () => {
+    if (!pendingSizeSelection || sizeSelect.value === "all") return false;
+    const item = priceCatalog.find((catalogItem) =>
+      catalogItem.category === pendingSizeSelection.category &&
+      catalogItem.title === pendingSizeSelection.title &&
+      normalizePriceSize(catalogItem.size) === sizeSelect.value
+    );
+    if (!item) return false;
+
+    selected = selected
+      .filter((selectedItem) => !(selectedItem.category === pendingSizeSelection.category && selectedItem.title === pendingSizeSelection.title))
+      .concat(item);
+    trackedSizeSelection = { ...pendingSizeSelection };
+    localStorage.setItem("tiptopTrackedSizeTitle", pendingSizeSelection.title);
+    localStorage.setItem("tiptopTrackedSizeCategory", pendingSizeSelection.category);
+    clearPendingSizeSelection();
+    renderItems();
+    renderSelected();
+    window.requestAnimationFrame(() => {
+      root.querySelector(".selected-services")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return true;
+  };
+
+  const updateTrackedSizeSelection = () => {
+    if (!trackedSizeSelection || pendingSizeSelection || sizeSelect.value === "all") return false;
+    const hasTrackedSelection = selected.some((selectedItem) =>
+      selectedItem.category === trackedSizeSelection.category &&
+      selectedItem.title === trackedSizeSelection.title
+    );
+    if (!hasTrackedSelection) {
+      trackedSizeSelection = null;
+      localStorage.removeItem("tiptopTrackedSizeTitle");
+      localStorage.removeItem("tiptopTrackedSizeCategory");
+      return false;
+    }
+
+    const item = priceCatalog.find((catalogItem) =>
+      catalogItem.category === trackedSizeSelection.category &&
+      catalogItem.title === trackedSizeSelection.title &&
+      normalizePriceSize(catalogItem.size) === sizeSelect.value
+    );
+    if (!item) return false;
+
+    selected = selected.map((selectedItem) =>
+      selectedItem.category === trackedSizeSelection.category && selectedItem.title === trackedSizeSelection.title
+        ? item
+        : selectedItem
+    );
+    renderItems();
+    renderSelected();
+    return true;
+  };
+
+  const renderPendingSizePrompt = () => {
+    if (!pendingSizeSelection) return;
+    sizeFilter?.classList.add("is-attention");
+    if (!root.querySelector("[data-size-prompt]")) {
+      sizeFilter?.insertAdjacentHTML("beforeend", `<p class="price-size-prompt" data-size-prompt>Válassz autó méretet, mert ennél a szolgáltatásnál méret szerint változik az ár.</p>`);
+    }
+    if (!addPendingSizeSelection()) {
+      window.requestAnimationFrame(() => {
+        sizeFilter?.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    }
+  };
+
   categorySelect.addEventListener("change", () => {
     activeCategory = categorySelect.value;
     renderItems();
@@ -868,25 +969,85 @@ function bindPriceCalculator() {
 
     const button = event.target.closest("[data-remove-selected]");
     if (!button) return;
+    const removedItem = selected[Number(button.getAttribute("data-remove-selected"))];
     selected = selected.filter((_, index) => index !== Number(button.getAttribute("data-remove-selected")));
+    if (
+      trackedSizeSelection &&
+      removedItem?.category === trackedSizeSelection.category &&
+      removedItem?.title === trackedSizeSelection.title
+    ) {
+      trackedSizeSelection = null;
+      localStorage.removeItem("tiptopTrackedSizeTitle");
+      localStorage.removeItem("tiptopTrackedSizeCategory");
+    }
     renderItems();
     renderSelected();
   });
 
   clearButton?.addEventListener("click", () => {
     selected = [];
+    trackedSizeSelection = null;
+    localStorage.removeItem("tiptopTrackedSizeTitle");
+    localStorage.removeItem("tiptopTrackedSizeCategory");
     renderItems();
     renderSelected();
   });
 
   sizeSelect.addEventListener("change", () => {
     updateSizeIcon();
+    if (pendingSizeSelection && addPendingSizeSelection()) return;
+    if (updateTrackedSizeSelection()) return;
     renderItems();
   });
   renderCategories();
   updateSizeIcon();
   renderItems();
   renderSelected();
+  renderPendingSizePrompt();
+
+  if (localStorage.getItem("tiptopScrollToSelected") === "true") {
+    localStorage.removeItem("tiptopScrollToSelected");
+    if (!pendingSizeSelection) {
+      window.requestAnimationFrame(() => {
+        root.querySelector(".selected-services")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }
+}
+
+function bindPriceSelectionLinks() {
+  document.querySelectorAll("[data-price-select-title]").forEach((link) => {
+    link.addEventListener("click", () => {
+      const title = link.getAttribute("data-price-select-title");
+      const mode = link.getAttribute("data-price-select-mode");
+      const category = link.getAttribute("data-price-select-category");
+      if (mode === "size") {
+        localStorage.setItem("tiptopPendingPriceTitle", title);
+        localStorage.setItem("tiptopPendingPriceCategory", category || "");
+        localStorage.setItem("tiptopPreferredPriceCategory", category || "");
+        localStorage.removeItem("tiptopScrollToSelected");
+        return;
+      }
+
+      const item = priceCatalog.find((catalogItem) => catalogItem.title === title);
+      if (!item) return;
+
+      let selected = [];
+      try {
+        const storedSelection = JSON.parse(localStorage.getItem("tiptopSelectedServices") || "[]");
+        if (Array.isArray(storedSelection)) selected = storedSelection;
+      } catch (error) {
+        selected = [];
+      }
+
+      const getItemId = (service) => service.id || `${service.category}|${service.title}|${service.size}|${service.price ?? "custom"}`;
+      if (!selected.some((selectedItem) => getItemId(selectedItem) === getItemId(item))) {
+        localStorage.setItem("tiptopSelectedServices", JSON.stringify([...selected, item]));
+      }
+      localStorage.setItem("tiptopPreferredPriceCategory", item.category);
+      localStorage.setItem("tiptopScrollToSelected", "true");
+    });
+  });
 }
 
 function initDesktopOpenDetails() {
@@ -918,6 +1079,7 @@ document.addEventListener("DOMContentLoaded", () => {
   bindDiagnosis();
   bindServiceGroups();
   bindPriceCalculator();
+  bindPriceSelectionLinks();
   initDesktopOpenDetails();
 });
 
