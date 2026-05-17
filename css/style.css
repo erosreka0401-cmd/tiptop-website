@@ -1041,6 +1041,15 @@ h4 {
   box-shadow: var(--shadow);
 }
 
+.about-hero-head {
+  max-width: min(1120px, 100%);
+}
+
+.about-hero-title {
+  white-space: nowrap;
+  font-size: clamp(34px, 4vw, 56px);
+}
+
 .about-card {
   min-height: 100%;
 }
@@ -2196,6 +2205,11 @@ textarea.field {
 
   .offers-hero .section-title {
     white-space: normal;
+  }
+
+  .about-hero-title {
+    white-space: normal;
+    font-size: clamp(32px, 6vw, 48px);
   }
 
   .trust-head .section-title {
