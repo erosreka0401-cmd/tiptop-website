@@ -369,7 +369,7 @@ const diagnosisData = {
     text: "A horpadás, kavicsfelverődés, bőr- vagy szövetkárosodás pontos javíthatósága mindig a sérülés helyétől, méretétől és jellegétől függ. Az első lépés a fotóbeküldés vagy személyes állapotfelmérés.",
     href: "szolgaltatasok/bor-szovet-javitas/",
     actions: [
-      { label: "Horpadás javítás | Hívj: +36 30 235 0633", href: "tel:+36302350633", variant: "light" },
+      { label: "Horpadás javítás | Részletek", href: "szolgaltatasok/horpadas-kavicsfelverodes/", variant: "light" },
       { label: "Bőr és szövet javítás, festés | Részletek", href: "szolgaltatasok/bor-szovet-javitas/", variant: "outline" },
     ],
   },
@@ -504,14 +504,14 @@ const priceCatalog = [
   { category: "wash", title: "Külső mosás", size: "Kisbusz / TGK / Pick Up", price: 12000 },
   { category: "wash", title: "Belső takarítás", size: "Kisbusz / TGK / Pick Up", price: 12000 },
   { category: "wash", title: "Prémium külső-belső takarítás Nano Finish bevonattal", size: "Kisbusz / TGK / Pick Up", price: 27000 },
-  { category: "upholstery", title: "Normál kárpittisztítás", size: "Városi cirkáló", price: 45000 },
-  { category: "upholstery", title: "Normál kárpittisztítás", size: "Személyautó / SUV", price: 50000 },
-  { category: "upholstery", title: "Normál kárpittisztítás", size: "Terepjáró", price: 55000 },
-  { category: "upholstery", title: "Normál kárpittisztítás", size: "Kisbusz / TGK", price: 65000 },
-  { category: "upholstery", title: "Prémium kárpittisztítás szövetvédelemmel", size: "Városi cirkáló", price: 55000 },
-  { category: "upholstery", title: "Prémium kárpittisztítás szövetvédelemmel", size: "Személyautó / SUV", price: 60000 },
-  { category: "upholstery", title: "Prémium kárpittisztítás szövetvédelemmel", size: "Terepjáró", price: 65000 },
-  { category: "upholstery", title: "Prémium kárpittisztítás szövetvédelemmel", size: "Kisbusz / TGK", price: 75000 },
+  { category: "upholstery", title: "Normál kárpittisztítás", size: "Városi cirkáló", price: 49990 },
+  { category: "upholstery", title: "Normál kárpittisztítás", size: "Személyautó / SUV", price: 54990 },
+  { category: "upholstery", title: "Normál kárpittisztítás", size: "Terepjáró", price: 59990 },
+  { category: "upholstery", title: "Normál kárpittisztítás", size: "Kisbusz / TGK", price: 69990 },
+  { category: "upholstery", title: "Prémium kárpittisztítás szövetvédelemmel", size: "Városi cirkáló", price: 59990 },
+  { category: "upholstery", title: "Prémium kárpittisztítás szövetvédelemmel", size: "Személyautó / SUV", price: 64990 },
+  { category: "upholstery", title: "Prémium kárpittisztítás szövetvédelemmel", size: "Terepjáró", price: 69990 },
+  { category: "upholstery", title: "Prémium kárpittisztítás szövetvédelemmel", size: "Kisbusz / TGK", price: 79990 },
   { category: "upholstery", title: "Üléstisztítás / darab", size: "Kiegészítő", price: 7500 },
   { category: "upholstery", title: "Erős szennyeződés felár", size: "Kiegészítő", price: 5000 },
   { category: "upholstery", title: "Kisbusz kárpittisztítás, 9 személy", size: "Kisbusz / TGK", price: 65000 },
@@ -520,9 +520,9 @@ const priceCatalog = [
 
   { category: "climate", title: "Ózonos klímatisztítás", size: "Klíma", price: 12000 },
   { category: "climate", title: "Vegyszeres klímatisztítás", size: "Klíma", price: 17900 },
-  { category: "climate", title: "Klíma kombó: vegyszeres + ózonos kezelés", size: "Klíma", price: 17900 },
+  { category: "climate", title: "Klíma kombó: vegyszeres + ózonos kezelés", size: "Klíma", price: 19990 },
   { category: "climate", title: "Vegyszer + ózon + ajándék utastér-fertőtlenítés", size: "Klíma", price: 19900 },
-  { category: "climate", title: "Ózonos szagtalanítás / óra", size: "Klíma", price: 12000 },
+  { category: "climate", title: "Ózonos szagtalanítás / óra", size: "Klíma", price: 10000 },
   { category: "climate", title: "Pollenszűrő csere hozott szűrővel", size: "Klíma", price: null, priceText: "Díjmentes", note: "Hozott pollenszűrő esetén" },
 
   { category: "polish", title: "Fényesítő polírozás", size: "Városi cirkáló", price: 45000 },
@@ -538,8 +538,7 @@ const priceCatalog = [
   { category: "polish", title: "PolishAngel 3-5 lépcsős prémium polírozás", size: "Terepjáró", price: 150000 },
   { category: "polish", title: "PolishAngel 3-5 lépcsős prémium polírozás", size: "Kisbusz / TGK", price: 180000 },
   { category: "polish", title: "Prémium waxolás", size: "Kiegészítő", price: 25000 },
-  { category: "ceramic", title: "Kerámia szélvédő bevonat", size: "Kiegészítő", price: 10000 },
-  { category: "ceramic", title: "Kerámia szélvédő vízlepergető bevonat", size: "Kiegészítő", price: 12000 },
+  { category: "ceramic", title: "Kerámia szélvédő bevonat", size: "Kiegészítő", price: 12000 },
   { category: "ceramic", title: "Bronz kerámia csomag", size: "Városi cirkáló", price: 99000 },
   { category: "ceramic", title: "Bronz kerámia csomag", size: "Személyautó / SUV", price: 130000 },
   { category: "ceramic", title: "Bronz kerámia csomag", size: "Terepjáró", price: 150000 },
@@ -559,7 +558,7 @@ const priceCatalog = [
 
   { category: "lights", title: "Lámpapolírozás kerámiával, 2 darab", size: "Lámpa", price: 25000 },
   { category: "lights", title: "Lámpafóliázás, 2 darab", size: "Lámpa", price: 40000 },
-  { category: "engine", title: "Autó motormosás", size: "Motortér", price: 10000 },
+  { category: "engine", title: "Autó motortér tisztítás", size: "Motortér", price: 10000 },
   { category: "engine", title: "DSL hidrogénes motortisztítás", size: "Motortér", price: 20000 },
 
   { category: "fleet", title: "Teherautó belső takarítás", size: "Teherautó / munkagép", price: 35000 },
@@ -581,7 +580,7 @@ const crossSellCatalog = [
   { id: "leather-care-premium", category: "addon", title: "Bőrápolás - prémium", size: "Kiegészítő", price: 6500, note: "Külső-belső takarítás mellé" },
   { id: "nano-windshield", category: "addon", title: "Nano szélvédő kezelés", size: "Kiegészítő", price: 10000 },
   { id: "nano-all-glass", category: "addon", title: "Nano üvegkezelés - összes üvegfelület", size: "Kiegészítő", price: 20000 },
-  { id: "climate-ozone-30", category: "addon", title: "Klímatisztítás, ózonos kezelés", size: "Kiegészítő", price: 10000, note: "30 perc" },
+  { id: "climate-ozone-30", category: "addon", title: "Ózonos belsőtér tisztítás", size: "Kiegészítő", price: 10000, priceText: "10 000 Ft/óra" },
   { id: "dog-hair-fee", category: "addon", title: "Kutyaszőr felár", size: "Kiegészítő", price: 5000, priceText: "5 000 Ft-tól" },
   { id: "engine-cleaning-addon", category: "addon", title: "Motortér tisztítás", size: "Kiegészítő", price: 10000 },
   { id: "fabric-protection", category: "addon", title: "Szövetimpregnálás", size: "Kiegészítő", price: 15000 },
@@ -596,7 +595,7 @@ const crossSellCatalog = [
   { id: "pollen-filter-change", category: "addon", title: "Pollenszűrő csere", size: "Kiegészítő", price: 0, priceText: "Díjmentes", note: "Hozott pollenszűrő esetén" },
   { id: "interior-cleaning-by-size", category: "addon", title: "Belső takarítás", size: "Kiegészítő", price: null, priceText: "Járműméret szerint", note: "Árlista alapján" },
   { id: "upholstery-by-size", category: "addon", title: "Kárpittisztítás", size: "Kiegészítő", price: null, priceText: "Kárpittisztítási árlista szerint" },
-  { id: "ozone-deodorizing-addon", category: "addon", title: "Ózonos szagtalanítás", size: "Kiegészítő", price: 10000, priceText: "10 000-12 000 Ft", note: "Alkalom vagy óra szerint" },
+  { id: "ozone-deodorizing-addon", category: "addon", title: "Ózonos szagtalanítás", size: "Kiegészítő", price: 10000, priceText: "10 000 Ft/óra" },
   { id: "wash-by-size", category: "addon", title: "Külső-belső takarítás", size: "Kiegészítő", price: null, priceText: "Járműméret szerint", note: "Árlista alapján" },
   { id: "polish-by-size", category: "addon", title: "Polírozás", size: "Kiegészítő", price: null, priceText: "Járműméret szerint", note: "Árlista alapján" },
   { id: "fleet-combo", category: "addon", title: "Kárpittisztítás + polírozás kombó", size: "Kiegészítő", price: 100000 },
@@ -665,8 +664,7 @@ const priceDescriptions = {
   "VOLKSWAGEN prémium külső-belső takarítás": "külső-belső prémium takarítás márkaspecifikus csomagban",
   "Prémium waxolás": "fényezésápolás, wax védelem",
   "Kerámia szélvédő bevonat": "szélvédő bevonat, vízlepergető hatás",
-  "Kerámia szélvédő vízlepergető bevonat": "szélvédő bevonat, vízlepergető hatás",
-  "Autó motormosás": "motortér tisztítás",
+  "Autó motortér tisztítás": "motortér tisztítás",
   "Erős szennyeződés felár": "erős szennyezettség többletkezelése",
   "Normál kárpittisztítás": "kárpittisztítás, belső textilfelületek tisztítása",
   "Prémium kárpittisztítás szövetvédelemmel": "kárpittisztítás, szövetvédelem",
@@ -710,7 +708,7 @@ const priceDescriptions = {
   "Bőrápolás - prémium": "belső bőrfelületek prémium ápolása",
   "Nano szélvédő kezelés": "vízlepergető nano bevonat szélvédőre",
   "Nano üvegkezelés - összes üvegfelület": "vízlepergető nano bevonat minden üvegfelületre",
-  "Klímatisztítás, ózonos kezelés": "ózonos klímakezelés, 30 perces kezelés",
+  "Ózonos belsőtér tisztítás": "ózonos belsőtér tisztítás",
   "Kutyaszőr felár": "kárpittisztításnál extra szőrmentesítési munka",
   "Motortér tisztítás": "esztétikai motortér tisztítás",
   "Szövetimpregnálás": "foltmegelőző szövetvédelem",
@@ -1128,6 +1126,61 @@ function initDesktopOpenDetails() {
   window.addEventListener("resize", syncOpenState);
 }
 
+function initOfferImageLightbox() {
+  const offerImages = document.querySelectorAll(".offer-image.has-image img");
+  if (!offerImages.length) return;
+
+  const lightbox = document.createElement("div");
+  lightbox.className = "image-lightbox";
+  lightbox.innerHTML = `
+    <button type="button" class="image-lightbox-close" aria-label="Kép bezárása"><i class="fa-solid fa-xmark"></i></button>
+    <img src="" alt="">
+  `;
+  document.body.appendChild(lightbox);
+
+  const lightboxImage = lightbox.querySelector("img");
+  const closeButton = lightbox.querySelector(".image-lightbox-close");
+
+  const closeLightbox = () => {
+    lightbox.classList.remove("is-open");
+    document.body.classList.remove("has-open-lightbox");
+    lightboxImage.removeAttribute("src");
+    lightboxImage.alt = "";
+  };
+
+  offerImages.forEach((image) => {
+    image.closest(".offer-image")?.setAttribute("role", "button");
+    image.closest(".offer-image")?.setAttribute("tabindex", "0");
+    image.closest(".offer-image")?.setAttribute("aria-label", `${image.alt || "Ajánlat képe"} nagyítása`);
+
+    const openLightbox = () => {
+      lightboxImage.src = image.currentSrc || image.src;
+      lightboxImage.alt = image.alt || "";
+      lightbox.classList.add("is-open");
+      document.body.classList.add("has-open-lightbox");
+      closeButton.focus();
+    };
+
+    image.closest(".offer-image")?.addEventListener("click", openLightbox);
+    image.closest(".offer-image")?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openLightbox();
+      }
+    });
+  });
+
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox || event.target.closest(".image-lightbox-close")) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && lightbox.classList.contains("is-open")) closeLightbox();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderHeader();
   renderFooter();
@@ -1141,5 +1194,6 @@ document.addEventListener("DOMContentLoaded", () => {
   bindPriceCalculator();
   bindPriceSelectionLinks();
   initDesktopOpenDetails();
+  initOfferImageLightbox();
 });
 
