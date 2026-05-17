@@ -728,6 +728,8 @@ function bindPriceCalculator() {
   const pendingTitle = localStorage.getItem("tiptopPendingPriceTitle");
   const pendingCategory = localStorage.getItem("tiptopPendingPriceCategory");
   let pendingSizeSelection = pendingTitle && pendingCategory ? { title: pendingTitle, category: pendingCategory } : null;
+  let sizeHintRequested = localStorage.getItem("tiptopPriceSizeHint") === "true";
+  localStorage.removeItem("tiptopPriceSizeHint");
   const trackedTitle = localStorage.getItem("tiptopTrackedSizeTitle");
   const trackedCategory = localStorage.getItem("tiptopTrackedSizeCategory");
   let trackedSizeSelection = trackedTitle && trackedCategory ? { title: trackedTitle, category: trackedCategory } : null;
@@ -928,12 +930,12 @@ function bindPriceCalculator() {
   };
 
   const renderPendingSizePrompt = () => {
-    if (!pendingSizeSelection) return;
+    if (!pendingSizeSelection && !sizeHintRequested) return;
     sizeFilter?.classList.add("is-attention");
     if (!root.querySelector("[data-size-prompt]")) {
       sizeFilter?.insertAdjacentHTML("beforeend", `<p class="price-size-prompt" data-size-prompt>Válassz autó méretet, mert ennél a szolgáltatásnál méret szerint változik az ár.</p>`);
     }
-    if (!addPendingSizeSelection()) {
+    if (!pendingSizeSelection || !addPendingSizeSelection()) {
       window.requestAnimationFrame(() => {
         sizeFilter?.scrollIntoView({ behavior: "smooth", block: "center" });
       });
@@ -995,6 +997,11 @@ function bindPriceCalculator() {
 
   sizeSelect.addEventListener("change", () => {
     updateSizeIcon();
+    if (sizeHintRequested && !pendingSizeSelection) {
+      sizeHintRequested = false;
+      sizeFilter?.classList.remove("is-attention");
+      root.querySelector("[data-size-prompt]")?.remove();
+    }
     if (pendingSizeSelection && addPendingSizeSelection()) return;
     if (updateTrackedSizeSelection()) return;
     renderItems();
@@ -1021,6 +1028,9 @@ function bindPriceSelectionLinks() {
       const category = link.getAttribute("data-price-group-link");
       if (!category) return;
       localStorage.setItem("tiptopPreferredPriceCategory", category);
+      if (link.getAttribute("data-price-size-hint") === "true") {
+        localStorage.setItem("tiptopPriceSizeHint", "true");
+      }
     });
   });
 
