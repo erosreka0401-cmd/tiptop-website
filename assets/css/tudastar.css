@@ -24,7 +24,8 @@
 }
 
 .tudastar-card {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   border: 1px solid rgba(242, 200, 75, 0.24);
   border-radius: 22px;
@@ -37,13 +38,14 @@
 .tudastar-card__image,
 .tudastar-card__image-placeholder {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  flex: 0 0 auto;
+  height: clamp(190px, 58vw, 280px);
 }
 
 .tudastar-card__image {
   display: block;
-  height: 100%;
   object-fit: cover;
+  object-position: center;
 }
 
 .tudastar-card__image-placeholder {
@@ -62,9 +64,12 @@
 }
 
 .tudastar-card__body {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 12px;
   padding: 24px;
+  background: rgba(16, 24, 30, 0.94);
 }
 
 .tudastar-card__badges {
@@ -158,10 +163,20 @@
   .tudastar-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .tudastar-card__image,
+  .tudastar-card__image-placeholder {
+    height: 240px;
+  }
 }
 
 @media (min-width: 1040px) {
   .tudastar-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .tudastar-card__image,
+  .tudastar-card__image-placeholder {
+    height: 220px;
   }
 }
