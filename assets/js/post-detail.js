@@ -64,6 +64,56 @@ function getPostFaqs(post) {
   return normalizeFaqs(post.faqs || post.faq || post.faq_items || post.questions);
 }
 
+function parseInlineMetadata(content) {
+  const normalized = String(content || "").replace(/\r\n/g, "\n");
+  const ctaMatch = normalized.match(/\n(?:CTA|Cta|cta):\s*\n([\s\S]*?)(?=\n(?:GYIK|Gyakori kérdések|FAQ):\s*\n|$)/);
+  const faqMatch = normalized.match(/\n(?:GYIK|Gyakori kérdések|FAQ):\s*\n([\s\S]*)$/);
+  let cleanContent = normalized;
+  let cta = null;
+  let faqs = [];
+
+  if (ctaMatch) {
+    cleanContent = cleanContent.replace(ctaMatch[0], "");
+    const lines = ctaMatch[1]
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+    const label = lines.find((line) => /^(gomb|label|szöveg):/i.test(line))?.replace(/^(gomb|label|szöveg):\s*/i, "");
+    const url = lines.find((line) => /^(url|link):/i.test(line))?.replace(/^(url|link):\s*/i, "");
+    const text = lines.find((line) => /^(leírás|bevezető|intro):/i.test(line))?.replace(/^(leírás|bevezető|intro):\s*/i, "");
+
+    if (label && url) {
+      cta = { label, url, text: text || "" };
+    }
+  }
+
+  if (faqMatch) {
+    cleanContent = cleanContent.replace(faqMatch[0], "");
+    const blocks = faqMatch[1]
+      .trim()
+      .split(/\n\s*\n/)
+      .map((block) => block.trim())
+      .filter(Boolean);
+
+    faqs = blocks
+      .map((block) => {
+        const question = block.match(/^(?:K|Q|Kérdés):\s*(.+)$/im)?.[1] || "";
+        const answer = block.match(/^(?:V|A|Válasz):\s*([\s\S]+)$/im)?.[1] || "";
+        return {
+          question: question.trim(),
+          answer: answer.trim().replace(/\n+/g, " "),
+        };
+      })
+      .filter((item) => item.question && item.answer);
+  }
+
+  return {
+    content: cleanContent.trim(),
+    cta,
+    faqs,
+  };
+}
+
 function createContentBlock(block) {
   const trimmed = block.trim();
 
@@ -208,15 +258,16 @@ function renderPost(post) {
     articleRoot.append(image);
   }
 
-  const content = getPostContent(post);
-  if (content) {
-    appendArticleContent(articleRoot, content);
+  const parsedContent = parseInlineMetadata(getPostContent(post));
+  if (parsedContent.content) {
+    appendArticleContent(articleRoot, parsedContent.content);
   } else {
-    articleRoot.append(createMessage("Ehhez a cikkhez még nincs feltöltött szöveges tartalom."));
+    articleRoot.append(createMessage("Ehhez a cikkhez m?g nincs felt?lt?tt sz?veges tartalom."));
   }
 
-  appendCta(articleRoot, getPostCta(post));
-  appendFaqs(articleRoot, getPostFaqs(post));
+  const postFaqs = getPostFaqs(post);
+  appendCta(articleRoot, getPostCta(post) || parsedContent.cta);
+  appendFaqs(articleRoot, postFaqs.length ? postFaqs : parsedContent.faqs);
 }
 
 async function loadPost() {
