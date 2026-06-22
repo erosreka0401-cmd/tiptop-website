@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajánlatok kezelése | Tip-Top Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin-page">
+  <main class="admin-shell admin-shell-wide">
+    <header class="admin-topbar">
+      <div>
+        <p class="admin-kicker">Tip-Top admin</p>
+        <h1>Ajánlatok kezelése</h1>
+      </div>
+      <button id="admin-logout" class="admin-button admin-button-secondary" type="button">Kilépés</button>
+    </header>
+
+    <section id="admin-access-panel" class="admin-panel">
+      <p id="admin-access-message" class="admin-message" role="status">Admin jogosultság ellenőrzése...</p>
+    </section>
+
+    <section id="offers-admin-panel" class="admin-layout" hidden>
+      <form id="offer-form" class="admin-panel admin-form-panel">
+        <div class="admin-form-head">
+          <h2 id="offer-form-title">Új ajánlat</h2>
+          <button id="offer-form-reset" class="admin-button admin-button-secondary" type="button">Új ajánlat</button>
+        </div>
+        <input type="hidden" name="id">
+        <label>
+          Cím
+          <input class="admin-field" type="text" name="title" required>
+        </label>
+        <label>
+          Leírás
+          <textarea class="admin-field" name="description" rows="3"></textarea>
+        </label>
+        <label>
+          Felsorolás elemei
+          <textarea class="admin-field" name="items" rows="6" placeholder="Egy sor = egy listaelem"></textarea>
+        </label>
+        <div class="admin-field-grid">
+          <label>
+            Ár címke
+            <input class="admin-field" type="text" name="price_label" value="Ár">
+          </label>
+          <label>
+            Ár
+            <input class="admin-field" type="text" name="price">
+          </label>
+        </div>
+        <div class="admin-field-grid">
+          <label>
+            CTA szöveg
+            <input class="admin-field" type="text" name="cta_label" value="Időpontot foglalok">
+          </label>
+          <label>
+            Foglalási URL
+            <input class="admin-field" type="text" name="booking_url" placeholder="/foglalas.html">
+          </label>
+        </div>
+        <div class="admin-field-grid">
+          <label>
+            Sorrend
+            <input class="admin-field" type="number" name="sort_order" step="1">
+          </label>
+          <label class="admin-checkbox">
+            <input type="checkbox" name="is_active" checked>
+            Aktív ajánlat
+          </label>
+        </div>
+        <label>
+          Kép URL
+          <input class="admin-field" type="url" name="image_url">
+        </label>
+        <label>
+          Új kép feltöltése
+          <input class="admin-field" type="file" name="image_file" accept="image/*">
+        </label>
+        <button class="admin-button" type="submit">Ajánlat mentése</button>
+        <p id="offer-form-message" class="admin-message" role="status"></p>
+      </form>
+
+      <section class="admin-panel">
+        <div class="admin-form-head">
+          <h2>Ajánlatlista</h2>
+          <button id="offers-refresh" class="admin-button admin-button-secondary" type="button">Frissítés</button>
+        </div>
+        <div id="offers-admin-list" class="admin-offer-list"></div>
+      </section>
+    </section>
+  </main>
+  <script type="module" src="../assets/js/admin-offers.js"></script>
+</body>
+</html>

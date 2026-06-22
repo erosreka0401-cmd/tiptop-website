@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin belépés | Tip-Top Autókozmetika</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin-page">
+  <main class="admin-shell">
+    <section class="admin-panel admin-login-panel">
+      <p class="admin-kicker">Tip-Top admin</p>
+      <h1>Belépés</h1>
+      <p class="admin-copy">Az admin felület használatához Supabase belépés és admin jogosultság szükséges.</p>
+      <form id="admin-login-form" class="admin-form">
+        <label>
+          E-mail
+          <input class="admin-field" type="email" name="email" autocomplete="email" required>
+        </label>
+        <label>
+          Jelszó
+          <input class="admin-field" type="password" name="password" autocomplete="current-password" required>
+        </label>
+        <button class="admin-button" type="submit">Belépek</button>
+      </form>
+      <p id="admin-auth-message" class="admin-message" role="status"></p>
+      <nav class="admin-module-links" aria-label="Admin modulok">
+        <a href="offers.html">Ajánlatok kezelése</a>
+      </nav>
+    </section>
+  </main>
+  <script type="module">
+    import { initLoginPage } from "../assets/js/admin-auth.js";
+    initLoginPage();
+  </script>
+</body>
+</html>

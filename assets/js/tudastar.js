@@ -23,7 +23,18 @@ function createBadge(text) {
   return badge;
 }
 
-function createCta(label, href = "#") {
+function getDetailUrl(item) {
+  if (item.url) return item.url;
+  if (item.slug) return `./${item.slug}/`;
+  return "#";
+}
+
+function hasDetailUrl(item) {
+  const url = getDetailUrl(item);
+  return url && url !== "#";
+}
+
+function createCta(label, href) {
   const cta = document.createElement("a");
   cta.className = "tudastar-card__cta";
   cta.href = href;
@@ -31,39 +42,28 @@ function createCta(label, href = "#") {
   return cta;
 }
 
-function getDetailUrl(item) {
-  if (item.url) return item.url;
-  if (item.slug) return `./${item.slug}/`;
-  return "#";
-}
-
-function normalizeGallery(gallery) {
-  if (Array.isArray(gallery)) return gallery;
-
-  if (typeof gallery === "string" && gallery.trim()) {
-    try {
-      const parsedGallery = JSON.parse(gallery);
-      return Array.isArray(parsedGallery) ? parsedGallery : [gallery];
-    } catch {
-      return [gallery];
-    }
+function appendCardImage(article, item, fallbackLabel) {
+  if (item.image_url) {
+    const image = document.createElement("img");
+    image.className = "tudastar-card__image";
+    image.src = item.image_url;
+    image.alt = item.alt_text || item.title || fallbackLabel;
+    image.loading = "lazy";
+    article.append(image);
+    return;
   }
 
-  return [];
+  const placeholder = document.createElement("div");
+  placeholder.className = "tudastar-card__image-placeholder";
+  placeholder.textContent = fallbackLabel;
+  article.append(placeholder);
 }
 
 function createPostCard(post) {
   const article = document.createElement("article");
   article.className = "tudastar-card";
 
-  if (post.image_url) {
-    const image = document.createElement("img");
-    image.className = "tudastar-card__image";
-    image.src = post.image_url;
-    image.alt = post.title || "Tip-Top szakértői cikk";
-    image.loading = "lazy";
-    article.append(image);
-  }
+  appendCardImage(article, post, "Szakértői cikk");
 
   const body = document.createElement("div");
   body.className = "tudastar-card__body";
@@ -80,7 +80,10 @@ function createPostCard(post) {
   body.append(title);
 
   appendText(body, "tudastar-card__text", post.excerpt || post.description || post.summary);
-  body.append(createCta("Elolvasom", getDetailUrl(post)));
+
+  if (hasDetailUrl(post)) {
+    body.append(createCta("Elolvasom", getDetailUrl(post)));
+  }
 
   article.append(body);
   return article;
@@ -90,28 +93,7 @@ function createBeforeAfterCard(item) {
   const article = document.createElement("article");
   article.className = "tudastar-card";
 
-  if (item.before_image_url || item.after_image_url) {
-    const imageWrap = document.createElement("div");
-    imageWrap.className = "tudastar-card__before-after";
-
-    if (item.before_image_url) {
-      const beforeImage = document.createElement("img");
-      beforeImage.src = item.before_image_url;
-      beforeImage.alt = `${item.title || "Előtte-utána munka"} előtte`;
-      beforeImage.loading = "lazy";
-      imageWrap.append(beforeImage);
-    }
-
-    if (item.after_image_url) {
-      const afterImage = document.createElement("img");
-      afterImage.src = item.after_image_url;
-      afterImage.alt = `${item.title || "Előtte-utána munka"} utána`;
-      afterImage.loading = "lazy";
-      imageWrap.append(afterImage);
-    }
-
-    article.append(imageWrap);
-  }
+  appendCardImage(article, item, "Előtte-utána eredmény");
 
   const body = document.createElement("div");
   body.className = "tudastar-card__body";
@@ -131,7 +113,6 @@ function createBeforeAfterCard(item) {
   appendText(body, "tudastar-card__text", item.solution ? `Megoldás: ${item.solution}` : "");
   appendText(body, "tudastar-card__result", item.result ? `Eredmény: ${item.result}` : "");
   appendText(body, "tudastar-card__service", item.related_service ? `Kapcsolódó szolgáltatás: ${item.related_service}` : "");
-  body.append(createCta("Megnézem az eredményt", getDetailUrl(item)));
 
   article.append(body);
   return article;
@@ -141,17 +122,7 @@ function createReferenceCard(item) {
   const article = document.createElement("article");
   article.className = "tudastar-card";
 
-  const gallery = normalizeGallery(item.gallery);
-  const firstImage = gallery[0];
-
-  if (firstImage) {
-    const image = document.createElement("img");
-    image.className = "tudastar-card__image";
-    image.src = firstImage;
-    image.alt = item.title || "Tip-Top referencia munka";
-    image.loading = "lazy";
-    article.append(image);
-  }
+  appendCardImage(article, item, "Referencia munka");
 
   const body = document.createElement("div");
   body.className = "tudastar-card__body";
@@ -172,7 +143,6 @@ function createReferenceCard(item) {
   appendText(body, "tudastar-card__text", item.solution ? `Megoldás: ${item.solution}` : "");
   appendText(body, "tudastar-card__result", item.result ? `Eredmény: ${item.result}` : "");
   appendText(body, "tudastar-card__service", item.related_service ? `Kapcsolódó szolgáltatás: ${item.related_service}` : "");
-  body.append(createCta("Megnézem a munkát", getDetailUrl(item)));
 
   article.append(body);
   return article;
