@@ -1,7 +1,7 @@
 import { supabase } from "./supabase-client.js";
 
 const offersGrid = document.getElementById("offers-grid");
-const fallbackBookingUrl = "/foglalas.html";
+const fallbackBookingUrl = "/foglalas/";
 
 function setMessage(message, type = "info") {
   if (!offersGrid) return;
