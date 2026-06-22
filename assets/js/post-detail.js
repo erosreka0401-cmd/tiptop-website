@@ -64,81 +64,36 @@ function getPostFaqs(post) {
   return normalizeFaqs(post.faqs || post.faq || post.faq_items || post.questions);
 }
 
-function parseInlineMetadata(content) {
-  const normalized = String(content || "").replace(/\r\n/g, "\n");
-  const ctaMatch = normalized.match(/\n(?:CTA|Cta|cta):\s*\n([\s\S]*?)(?=\n(?:GYIK|Gyakori kérdések|FAQ):\s*\n|$)/);
-  const faqMatch = normalized.match(/\n(?:GYIK|Gyakori kérdések|FAQ):\s*\n([\s\S]*)$/);
-  let cleanContent = normalized;
-  let cta = null;
-  let faqs = [];
+function createContentElement(block) {
+  const trimmed = block.text.trim();
 
-  if (ctaMatch) {
-    cleanContent = cleanContent.replace(ctaMatch[0], "");
-    const lines = ctaMatch[1]
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean);
-    const label = lines.find((line) => /^(gomb|label|szöveg):/i.test(line))?.replace(/^(gomb|label|szöveg):\s*/i, "");
-    const url = lines.find((line) => /^(url|link):/i.test(line))?.replace(/^(url|link):\s*/i, "");
-    const text = lines.find((line) => /^(leírás|bevezető|intro):/i.test(line))?.replace(/^(leírás|bevezető|intro):\s*/i, "");
-
-    if (label && url) {
-      cta = { label, url, text: text || "" };
-    }
-  }
-
-  if (faqMatch) {
-    cleanContent = cleanContent.replace(faqMatch[0], "");
-    const blocks = faqMatch[1]
-      .trim()
-      .split(/\n\s*\n/)
-      .map((block) => block.trim())
-      .filter(Boolean);
-
-    faqs = blocks
-      .map((block) => {
-        const question = block.match(/^(?:K|Q|Kérdés):\s*(.+)$/im)?.[1] || "";
-        const answer = block.match(/^(?:V|A|Válasz):\s*([\s\S]+)$/im)?.[1] || "";
-        return {
-          question: question.trim(),
-          answer: answer.trim().replace(/\n+/g, " "),
-        };
-      })
-      .filter((item) => item.question && item.answer);
-  }
-
-  return {
-    content: cleanContent.trim(),
-    cta,
-    faqs,
-  };
-}
-
-function createContentBlock(block) {
-  const trimmed = block.trim();
-
-  if (trimmed.startsWith("### ")) {
+  if (block.type === "h3") {
     const heading = document.createElement("h3");
-    heading.textContent = trimmed.replace(/^###\s+/, "");
+    heading.textContent = trimmed;
     return heading;
   }
 
-  if (trimmed.startsWith("## ")) {
+  if (block.type === "h2") {
     const heading = document.createElement("h2");
-    heading.textContent = trimmed.replace(/^##\s+/, "");
+    heading.textContent = trimmed;
     return heading;
   }
 
-  const listItems = trimmed
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.startsWith("- ") || line.startsWith("* "));
-
-  if (listItems.length > 1) {
+  if (block.type === "ul") {
     const list = document.createElement("ul");
-    listItems.forEach((line) => {
+    block.items.forEach((line) => {
       const item = document.createElement("li");
-      item.textContent = line.replace(/^[-*]\s+/, "");
+      item.textContent = line;
+      list.append(item);
+    });
+    return list;
+  }
+
+  if (block.type === "ol") {
+    const list = document.createElement("ol");
+    block.items.forEach((line) => {
+      const item = document.createElement("li");
+      item.textContent = line;
       list.append(item);
     });
     return list;
@@ -149,6 +104,78 @@ function createContentBlock(block) {
   return paragraph;
 }
 
+function parseMarkdownBlocks(text) {
+  const blocks = [];
+  let paragraph = [];
+  let list = null;
+
+  const flushParagraph = () => {
+    if (!paragraph.length) return;
+    blocks.push({ type: "p", text: paragraph.join(" ") });
+    paragraph = [];
+  };
+
+  const flushList = () => {
+    if (!list) return;
+    blocks.push(list);
+    list = null;
+  };
+
+  String(text || "")
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .forEach((rawLine) => {
+      const line = rawLine.trim();
+
+      if (!line) {
+        flushParagraph();
+        flushList();
+        return;
+      }
+
+      if (line.startsWith("### ")) {
+        flushParagraph();
+        flushList();
+        blocks.push({ type: "h3", text: line.replace(/^###\s+/, "") });
+        return;
+      }
+
+      if (line.startsWith("## ")) {
+        flushParagraph();
+        flushList();
+        blocks.push({ type: "h2", text: line.replace(/^##\s+/, "") });
+        return;
+      }
+
+      if (/^[-*]\s+/.test(line)) {
+        flushParagraph();
+        if (!list || list.type !== "ul") {
+          flushList();
+          list = { type: "ul", items: [] };
+        }
+        list.items.push(line.replace(/^[-*]\s+/, ""));
+        return;
+      }
+
+      if (/^\d+[.)]\s+/.test(line)) {
+        flushParagraph();
+        if (!list || list.type !== "ol") {
+          flushList();
+          list = { type: "ol", items: [] };
+        }
+        list.items.push(line.replace(/^\d+[.)]\s+/, ""));
+        return;
+      }
+
+      flushList();
+      paragraph.push(line);
+    });
+
+  flushParagraph();
+  flushList();
+  return blocks;
+}
+
 function appendArticleContent(parent, text) {
   const content = String(text || "").trim();
   if (!content) return;
@@ -156,12 +183,7 @@ function appendArticleContent(parent, text) {
   const wrapper = document.createElement("div");
   wrapper.className = "post-detail-content";
 
-  content
-    .replace(/\r\n/g, "\n")
-    .split(/\n\s*\n/)
-    .map((paragraph) => paragraph.trim())
-    .filter(Boolean)
-    .forEach((block) => wrapper.append(createContentBlock(block)));
+  parseMarkdownBlocks(content).forEach((block) => wrapper.append(createContentElement(block)));
 
   parent.append(wrapper);
 }
@@ -213,6 +235,22 @@ function appendFaqs(parent, faqs) {
   parent.append(section);
 }
 
+function appendRelatedService(parent, relatedService) {
+  if (!relatedService) return;
+
+  const section = document.createElement("aside");
+  section.className = "post-detail-related-service";
+
+  const label = document.createElement("span");
+  label.textContent = "Kapcsolódó szolgáltatás";
+
+  const text = document.createElement("strong");
+  text.textContent = relatedService;
+
+  section.append(label, text);
+  parent.append(section);
+}
+
 function renderPost(post) {
   if (!articleRoot) return;
 
@@ -258,16 +296,16 @@ function renderPost(post) {
     articleRoot.append(image);
   }
 
-  const parsedContent = parseInlineMetadata(getPostContent(post));
-  if (parsedContent.content) {
-    appendArticleContent(articleRoot, parsedContent.content);
+  const content = getPostContent(post);
+  if (content) {
+    appendArticleContent(articleRoot, content);
   } else {
-    articleRoot.append(createMessage("Ehhez a cikkhez m?g nincs felt?lt?tt sz?veges tartalom."));
+    articleRoot.append(createMessage("Ehhez a cikkhez még nincs feltöltött szöveges tartalom."));
   }
 
-  const postFaqs = getPostFaqs(post);
-  appendCta(articleRoot, getPostCta(post) || parsedContent.cta);
-  appendFaqs(articleRoot, postFaqs.length ? postFaqs : parsedContent.faqs);
+  appendRelatedService(articleRoot, post.related_service);
+  appendCta(articleRoot, getPostCta(post));
+  appendFaqs(articleRoot, getPostFaqs(post));
 }
 
 async function loadPost() {

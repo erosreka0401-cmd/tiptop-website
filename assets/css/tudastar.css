@@ -297,7 +297,8 @@
   font-size: 24px;
 }
 
-.post-detail-content ul {
+.post-detail-content ul,
+.post-detail-content ol {
   display: grid;
   gap: 10px;
   margin: 0;
@@ -326,6 +327,30 @@
 .post-detail-message--error {
   border-color: rgba(242, 88, 75, 0.4);
   color: #ffd8d2;
+}
+
+.post-detail-related-service {
+  display: grid;
+  gap: 8px;
+  margin-top: 28px;
+  padding: 22px;
+  border: 1px solid rgba(23, 125, 168, 0.28);
+  border-radius: 18px;
+  background: rgba(23, 125, 168, 0.12);
+}
+
+.post-detail-related-service span {
+  color: rgba(217, 226, 232, 0.72);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.post-detail-related-service strong {
+  color: #f6f8f9;
+  font-size: 20px;
+  font-style: italic;
 }
 
 .post-detail-cta {
