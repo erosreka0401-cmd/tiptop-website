@@ -905,9 +905,44 @@ h4 {
   cursor: pointer;
 }
 
+.problem-button span {
+  color: var(--gold);
+}
+
+.problem-button small {
+  display: block;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.45;
+}
+
 .problem-button:hover {
   border-color: rgba(242, 200, 75, 0.6);
   background: rgba(242, 200, 75, 0.08);
+}
+
+.faq-title {
+  font-size: clamp(40px, 4vw, 64px);
+}
+
+.faq-card {
+  border-color: rgba(242, 200, 75, 0.34);
+  background:
+    linear-gradient(135deg, rgba(242, 200, 75, 0.18), rgba(255, 255, 255, 0.05)),
+    rgba(24, 31, 36, 0.72);
+  box-shadow: 0 22px 70px rgba(24, 18, 4, 0.18);
+  backdrop-filter: blur(14px);
+}
+
+.faq-card h3 {
+  color: var(--gold);
+}
+
+.faq-card p {
+  color: rgba(217, 226, 232, 0.78);
 }
 
 .page-hero {
@@ -1540,6 +1575,19 @@ h4 {
 
 .compact-quote p {
   font-size: clamp(22px, 2.1vw, 30px);
+}
+
+.why-image-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.why-image-panel img {
+  width: min(333px, 100%);
+  height: auto;
+  border-radius: 18px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
 }
 
 .quote-line {
