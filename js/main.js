@@ -227,13 +227,6 @@ function initBackToTop() {
   const button = document.querySelector("[data-back-to-top]");
   if (!button) return;
 
-  const currentPath = window.location.pathname.replace(/\/index\.html$/, "/");
-  const homePath = new URL(toRoot("index.html"), window.location.href).pathname.replace(/\/index\.html$/, "/");
-  if (currentPath === homePath) {
-    button.hidden = true;
-    return;
-  }
-
   const updateVisibility = () => {
     button.classList.toggle("is-visible", window.scrollY > 640);
   };
