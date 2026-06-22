@@ -1,10 +1,6 @@
 import { supabase } from "./supabase-client.js";
 
-const grids = {
-  posts: document.getElementById("posts-grid"),
-  beforeAfter: document.getElementById("before-after-grid"),
-  references: document.getElementById("references-grid"),
-};
+const grids = {};
 
 function setMessage(grid, message, type = "info") {
   if (!grid) return;
@@ -182,68 +178,97 @@ function createReferenceCard(item) {
   return article;
 }
 
-async function loadSection({ grid, loadingText, emptyText, errorText, query, createCard }) {
+function renderItems(grid, items, createCard) {
+  grid.innerHTML = "";
+  const fragment = document.createDocumentFragment();
+  items.forEach((item) => fragment.append(createCard(item)));
+  grid.append(fragment);
+}
+
+async function loadPosts() {
+  const grid = grids.posts;
   if (!grid) return;
 
-  setMessage(grid, loadingText);
+  setMessage(grid, "Tudástár cikkek betöltése...");
 
-  const { data, error } = await query();
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("status", "published")
+    .order("created_at", { ascending: false });
 
   if (error) {
-    console.error(errorText, error);
-    setMessage(grid, errorText, "error");
+    console.error("Posts Supabase error:", error);
+    setMessage(grid, "A tudástár cikkek betöltése nem sikerült.", "error");
     return;
   }
 
   if (!data || data.length === 0) {
-    setMessage(grid, emptyText);
+    setMessage(grid, "Jelenleg nincs publikált cikk.");
     return;
   }
 
-  grid.innerHTML = "";
-  const fragment = document.createDocumentFragment();
-  data.forEach((item) => fragment.append(createCard(item)));
-  grid.append(fragment);
+  renderItems(grid, data, createPostCard);
 }
 
-loadSection({
-  grid: grids.posts,
-  loadingText: "Tudástár cikkek betöltése...",
-  emptyText: "Jelenleg nincs publikált cikk.",
-  errorText: "A tudástár cikkek betöltése nem sikerült.",
-  query: () =>
-    supabase
-      .from("posts")
-      .select("title,slug,url,image_url,type,category,excerpt,description,summary,status,created_at")
-      .eq("status", "published")
-      .order("created_at", { ascending: false }),
-  createCard: createPostCard,
-});
+async function loadBeforeAfter() {
+  const grid = grids.beforeAfter;
+  if (!grid) return;
 
-loadSection({
-  grid: grids.beforeAfter,
-  loadingText: "Előtte-utána munkák betöltése...",
-  emptyText: "Jelenleg nincs aktív előtte-utána munka.",
-  errorText: "Az előtte-utána munkák betöltése nem sikerült.",
-  query: () =>
-    supabase
-      .from("before_after")
-      .select("title,slug,url,before_image_url,after_image_url,category,problem,solution,result,related_service,is_active,sort_order")
-      .eq("is_active", true)
-      .order("sort_order", { ascending: true }),
-  createCard: createBeforeAfterCard,
-});
+  setMessage(grid, "Előtte-utána munkák betöltése...");
 
-loadSection({
-  grid: grids.references,
-  loadingText: "Referencia munkák betöltése...",
-  emptyText: "Jelenleg nincs aktív referencia munka.",
-  errorText: "A referencia munkák betöltése nem sikerült.",
-  query: () =>
-    supabase
-      .from("references")
-      .select("title,slug,url,gallery,car_type,category,problem,solution,result,related_service,is_active,sort_order")
-      .eq("is_active", true)
-      .order("sort_order", { ascending: true }),
-  createCard: createReferenceCard,
+  const { data, error } = await supabase
+    .from("before_after")
+    .select("*")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+
+  if (error) {
+    console.error("Before-after Supabase error:", error);
+    setMessage(grid, "Az előtte-utána munkák betöltése nem sikerült.", "error");
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    setMessage(grid, "Jelenleg nincs aktív előtte-utána munka.");
+    return;
+  }
+
+  renderItems(grid, data, createBeforeAfterCard);
+}
+
+async function loadReferences() {
+  const grid = grids.references;
+  if (!grid) return;
+
+  setMessage(grid, "Referencia munkák betöltése...");
+
+  const { data, error } = await supabase
+    .from("references")
+    .select("*")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+
+  if (error) {
+    console.error("References Supabase error:", error);
+    setMessage(grid, "A referencia munkák betöltése nem sikerült.", "error");
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    setMessage(grid, "Jelenleg nincs aktív referencia munka.");
+    return;
+  }
+
+  renderItems(grid, data, createReferenceCard);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  grids.posts = document.getElementById("posts-grid");
+  grids.beforeAfter = document.getElementById("before-after-grid");
+  grids.references = document.getElementById("references-grid");
+
+  loadPosts();
+  loadBeforeAfter();
+  loadReferences();
 });
