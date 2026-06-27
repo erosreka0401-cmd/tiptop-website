@@ -313,6 +313,14 @@ const diagnosisData = {
     text: "Új autónál az a legnagyobb előny, hogy az állapot még most megőrizhető.",
     href: "szolgaltatasok/keramia-bevonat/",
   },
+  eladas: {
+    title: "Eladásra felkészítés csomag",
+    text: "Állapotjavító csomag eladás előtt, amikor fontos az első benyomás, a tiszta beltér és az ápolt külső megjelenés. Tartalma: prémium wax bevonat, nedves kárpittisztítás, külső-belső takarítás, gumi- és felniápolás, ózonos klímatisztítás.",
+    href: "foglalas/",
+    actions: [
+      { label: "Időpontot foglalok", href: "foglalas/", variant: "light" },
+    ],
+  },
   keramia: {
     title: "Kerámia bevonat",
     text: "Tartós védelem új, polírozott vagy jó állapotú autóra. A cél, hogy a fényezés tovább őrizze a fényét, könnyebben tisztítható maradjon, és ellenállóbb legyen a mindennapi használat során.",

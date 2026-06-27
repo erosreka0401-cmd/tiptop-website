@@ -436,6 +436,14 @@ h4 {
   margin-top: 34px;
 }
 
+.hero .hero-actions {
+  width: min(100%, 554px);
+}
+
+.hero .hero-actions .btn:nth-child(3) {
+  flex-basis: 100%;
+}
+
 .section {
   padding: 88px 0;
 }
@@ -869,6 +877,52 @@ h4 {
 .trust-card p {
   font-size: 14px;
   line-height: 1.5;
+}
+
+.expertise-panel {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+  gap: 30px;
+  align-items: center;
+  margin-top: 34px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  background: rgba(12, 24, 31, 0.38);
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.16);
+}
+
+.expertise-photo {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  border-radius: 14px;
+}
+
+.expertise-copy {
+  display: grid;
+  gap: 14px;
+  color: var(--ink);
+  font-size: clamp(16px, 1.45vw, 19px);
+  line-height: 1.65;
+  font-weight: 700;
+}
+
+.expertise-copy p {
+  margin: 0;
+}
+
+.expertise-highlight {
+  margin-top: 4px !important;
+  padding: 18px 20px;
+  border-left: 4px solid var(--gold);
+  border-radius: 12px;
+  color: var(--ink-strong);
+  background: rgba(242, 200, 75, 0.1);
+  font-size: clamp(18px, 1.8vw, 24px);
+  line-height: 1.35;
+  font-weight: 900;
+  font-style: italic;
 }
 
 .card-link {
@@ -2575,7 +2629,7 @@ textarea.field {
     min-height: 720px;
     align-items: stretch;
     background:
-      linear-gradient(180deg, rgba(5, 8, 11, 0.22), rgba(5, 8, 11, 0.62) 42%, rgba(5, 8, 11, 0.98)),
+      linear-gradient(180deg, rgba(5, 8, 11, 0.22), rgba(5, 8, 11, 0.54) 34%, rgba(5, 8, 11, 0.9) 62%, rgba(5, 8, 11, 0.98)),
       var(--black);
   }
 
@@ -2589,7 +2643,7 @@ textarea.field {
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 56px 0 66px;
+    padding: 56px 0 34px;
   }
 
   .hero h1 {
@@ -2615,6 +2669,7 @@ textarea.field {
     font-size: 16px;
     line-height: 1.55;
     text-align: center;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
   }
 
   .compact-section .actions,
@@ -2667,6 +2722,28 @@ textarea.field {
     box-shadow:
       0 0 0 1px rgba(255, 255, 255, 0.18),
       0 0 18px rgba(255, 255, 255, 0.12);
+  }
+
+  .expertise-panel {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 26px;
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .expertise-photo {
+    aspect-ratio: 4 / 5;
+  }
+
+  .expertise-copy {
+    font-size: 15px;
+    line-height: 1.58;
+  }
+
+  .expertise-highlight {
+    padding: 16px;
+    font-size: 18px;
   }
 
   .grid-2,
