@@ -29,9 +29,34 @@ function normalizeItems(items) {
   return [];
 }
 
+function normalizeOfferText(value) {
+  return (value || "")
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ő/g, "o")
+    .replace(/ű/g, "u");
+}
+
+function getOfferAnchor(offer) {
+  const haystack = normalizeOfferText(`${offer.title || ""} ${offer.description || ""}`);
+
+  if (haystack.includes("markaspecifikus") || haystack.includes("marka specifikus")) return "markaspecifikus-premium";
+  if (haystack.includes("keramia") || haystack.includes("graphene")) return "keramia-bevonat";
+  if (haystack.includes("polirozas") || haystack.includes("polir")) return "polirozas";
+  if (haystack.includes("premium") && haystack.includes("kulso") && haystack.includes("belso")) return "premium-kulso-belso";
+
+  return "";
+}
+
 function createOfferCard(offer) {
   const article = document.createElement("article");
   article.className = "offer-card";
+  const anchor = getOfferAnchor(offer);
+  if (anchor) {
+    article.id = anchor;
+  }
 
   if (offer.image_url) {
     const image = document.createElement("img");
@@ -96,6 +121,18 @@ function createOfferCard(offer) {
   return article;
 }
 
+function scrollToRequestedOffer() {
+  const anchor = decodeURIComponent(window.location.hash || "").replace("#", "");
+  if (!anchor) return;
+
+  const target = document.getElementById(anchor);
+  if (!target) return;
+
+  window.requestAnimationFrame(() => {
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+
 async function loadOffers() {
   if (!offersGrid) return;
 
@@ -122,6 +159,7 @@ async function loadOffers() {
   const fragment = document.createDocumentFragment();
   data.forEach((offer) => fragment.append(createOfferCard(offer)));
   offersGrid.append(fragment);
+  scrollToRequestedOffer();
 }
 
 loadOffers();

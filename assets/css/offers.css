@@ -13,6 +13,7 @@
 .offer-card {
   display: grid;
   overflow: hidden;
+  scroll-margin-top: 96px;
   border: 1px solid rgba(242, 200, 75, 0.24);
   border-radius: 22px;
   background:

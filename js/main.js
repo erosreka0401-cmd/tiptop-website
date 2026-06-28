@@ -743,6 +743,18 @@ function getPriceText(item) {
   return item.priceText || formatPrice(item.price);
 }
 
+function hasFixedPrice(item) {
+  return Number.isFinite(item.price);
+}
+
+function isFreeCustomText(item) {
+  return item.price === null && ["Díjmentes", "Ajándék", "Csomagban"].includes(item.priceText);
+}
+
+function isCustomPriceItem(item) {
+  return item.price === null && !isFreeCustomText(item);
+}
+
 function bindPriceCalculator() {
   const root = document.querySelector("[data-price-calculator]");
   if (!root) return;
@@ -753,7 +765,9 @@ function bindPriceCalculator() {
   const sizeFilter = sizeSelect?.closest(".price-size-filter");
   const sizeIcon = root.querySelector("[data-price-size-icon] i");
   const selectedRoot = root.querySelector("[data-selected-list]");
+  const summaryLabel = root.querySelector(".selected-summary span");
   const totalRoot = root.querySelector("[data-selected-total]");
+  const noteRoot = root.querySelector(".selected-note");
   const clearButton = root.querySelector("[data-selected-clear]");
   const bookingButton = root.querySelector("[data-selected-booking]");
   let activeCategory = priceCategories[0][0];
@@ -875,8 +889,23 @@ function bindPriceCalculator() {
       `;
     }
 
-    const total = selected.reduce((sum, item) => sum + (item.price || 0), 0);
-    totalRoot.textContent = formatPrice(total);
+    const fixedTotal = selected.reduce((sum, item) => sum + (hasFixedPrice(item) ? item.price : 0), 0);
+    const customPriceCount = selected.filter(isCustomPriceItem).length;
+    const hasCustomPrice = customPriceCount > 0;
+
+    if (summaryLabel) {
+      summaryLabel.textContent = hasCustomPrice ? "Fix árú tételek részösszege" : "Tájékoztató végösszeg";
+    }
+
+    totalRoot.textContent = formatPrice(fixedTotal);
+
+    if (noteRoot) {
+      noteRoot.classList.toggle("is-warning", hasCustomPrice);
+      noteRoot.textContent = hasCustomPrice
+        ? `${customPriceCount === 1 ? "Az egyedi árú tétel nincs" : "Az egyedi árú tételek nincsenek"} beleszámolva a részösszegbe. A pontos ajánlatot fotó vagy állapotfelmérés alapján egyeztetjük.`
+        : "A végleges ár az autó állapota és a pontos igény alapján módosulhat.";
+    }
+
     saveSelection();
   };
 
