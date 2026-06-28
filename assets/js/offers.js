@@ -50,7 +50,67 @@ function getOfferAnchor(offer) {
   return "";
 }
 
+function getDisplayOffer(offer) {
+  const haystack = normalizeOfferText(`${offer.title || ""} ${offer.description || ""}`);
+  const overrides = [
+    {
+      matches: () => haystack.includes("eladasra") || haystack.includes("eladas elott"),
+      title: "Eladásra felkészítés csomag",
+      price: "85 000 Ft",
+    },
+    {
+      matches: () => haystack.includes("csillogas"),
+      title: "Csillogás csomag",
+      price: "105 000 Ft",
+    },
+    {
+      matches: () => haystack.includes("nano vedelem"),
+      title: "Nano védelem",
+      price: "10 000 Ft-tól",
+    },
+    {
+      matches: () => haystack.includes("keramia") || haystack.includes("graphene"),
+      title: "Kerámia védelem",
+      price: "99 000 Ft-tól",
+    },
+    {
+      matches: () => haystack.includes("lampapolir") || haystack.includes("lampa polir"),
+      title: "Lámpapolír",
+      price: "25 000 Ft/pár",
+    },
+    {
+      matches: () => haystack.includes("karpittisztitas"),
+      title: "Kárpittisztítás",
+      price: "49 990 Ft-tól",
+    },
+    {
+      matches: () => haystack.includes("polirozas") || haystack.includes("polir"),
+      title: "Polírozás csomag",
+      price: "45 000 Ft-tól",
+    },
+    {
+      matches: () => haystack.includes("premium") && haystack.includes("kulso") && haystack.includes("belso"),
+      title: "Prémium külső-belső takarítás Nano Finish bevonattal",
+      price: "16 500 Ft-tól",
+    },
+    {
+      matches: () => haystack.includes("markaspecifikus") || haystack.includes("marka specifikus"),
+      title: "Márkaspecifikus prémium csomag",
+      price: "25 000 Ft-tól",
+    },
+    {
+      matches: () => haystack.includes("klimatisztitas") || haystack.includes("klima"),
+      title: "Klímatisztítás",
+      price: "11 990 Ft-tól",
+    },
+  ];
+  const override = overrides.find((item) => item.matches());
+
+  return override ? { ...offer, ...override } : offer;
+}
+
 function createOfferCard(offer) {
+  offer = getDisplayOffer(offer);
   const article = document.createElement("article");
   article.className = "offer-card";
   const anchor = getOfferAnchor(offer);
